@@ -1,0 +1,110 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="adresForm">
+                        <!-- Select para Departamento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Departamento</mat-label>
+                            <mat-select formControlName="departamento">
+                                <mat-option *ngFor="let dept of departamentos" [value]="dept">{{ dept }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Select para Municipio -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Municipio</mat-label>
+                            <mat-select formControlName="municipio">
+                                <mat-option *ngFor="let mun of municipios" [value]="mun">{{ mun }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Select para Estado -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado</mat-label>
+                            <mat-select formControlName="estado">
+                                <mat-option value="ACTIVO">ACTIVO</mat-option>
+                                <mat-option value="PROTECCIÓN LABORAL C">PROTECCIÓN LABORAL C</mat-option>
+                                <mat-option value="RETIRADO">RETIRADO</mat-option>
+                                <mat-option value="AFILIADO FALLECIDO">AFILIADO FALLECIDO</mat-option>
+                                <mat-option value="SUSPENSIÓN POR MORA">SUSPENSIÓN POR MORA</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Input para Entidad -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Entidad</mat-label>
+                            <input matInput formControlName="entidad">
+                        </mat-form-field>
+
+                        <!-- Select para Regimen -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Regimen</mat-label>
+                            <mat-select formControlName="regimen">
+                                <mat-option value="CONTRIBUTIVO">CONTRIBUTIVO</mat-option>
+                                <mat-option value="SUBSIDIADO">SUBSIDIADO</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Input para Fecha de afiliacion efectiva -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha de afiliación efectiva</mat-label>
+                            <input matInput [matDatepicker]="picker1" formControlName="fechaAfiliacionEfectiva">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- Input para Fecha de finalizacion de afiliacion -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha de finalización de afiliación</mat-label>
+                            <input matInput [matDatepicker]="picker2" formControlName="fechaFinalizacionAfiliacion">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- Select para Tipo de afiliación -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de afiliación</mat-label>
+                            <mat-select formControlName="tipoAfiliacion">
+                                <mat-option value="CABEZA DE FAMILIA">CABEZA DE FAMILIA</mat-option>
+                                <mat-option value="BENEFICIARIO">BENEFICIARIO</mat-option>
+                                <mat-option value="COTIZANTE">COTIZANTE</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Input para Fecha_Adress -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha Adress</mat-label>
+                            <input matInput [matDatepicker]="picker3" formControlName="fechaAdress">
+                            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                            <mat-datepicker #picker3></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <div class="example-full-width">
+                            <!-- Input de archivo oculto -->
+                            <input type="file" #documentoInput (change)="onFileSelected($event)" accept=".pdf" hidden>
+
+                            <!-- Botón para seleccionar archivo -->
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF</button>
+
+                            <!-- Mostrar el nombre del archivo seleccionado -->
+                            <span *ngIf="pdfNombre">{{ pdfNombre }}</span>
+                        </div>
+
+                        <!-- Botón para cargar la información -->
+                        <div class="example-full-width">
+                            <button mat-flat-button (click)="cargarInformacion()" style="background: #8dd603;">Cargar Información</button>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

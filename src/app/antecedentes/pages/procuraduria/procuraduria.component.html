@@ -1,0 +1,45 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="ProcuraduriaForm">
+
+                        <!-- Select para Estado Procuraduria -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado Procuraduria</mat-label>
+                            <mat-select formControlName="estado_procuraduria">
+                                <mat-option value="Cumple">Cumple</mat-option>
+                                <mat-option value="No Cumple">No Cumple</mat-option>
+                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <div class="example-full-width">
+                            <!-- Input de archivo oculto -->
+                            <input type="file" #documentoInputProcuraduria (change)="onFileSelected($event)" accept=".pdf"
+                                hidden>
+
+                            <!-- Botón para seleccionar archivo -->
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Procuraduria</button>
+
+                            <!-- Mostrar el nombre del archivo seleccionado -->
+                            <span *ngIf="pdfNombreProcuraduria">{{ pdfNombreProcuraduria }}</span>
+                        </div>
+
+                        <!-- Botón para cargar la información -->
+                        <div class="example-full-width">
+                            <button mat-flat-button (click)="cargarInformacionProcuraduria()"
+                                style="background: #8dd603;">Cargar Información</button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

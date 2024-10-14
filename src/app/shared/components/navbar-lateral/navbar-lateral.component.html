@@ -1,0 +1,81 @@
+<div class="navbar-wrapper" style="position: relative; z-index: 1002;">
+  <div class="hamburger" (click)="toggleMenu()">&#9776;</div>
+</div>
+
+<div class="navbar-wrapper" style="position: relative; z-index: 1002;">
+  <div class="hamburger" (click)="toggleMenu()">&#9776;</div>
+</div>
+
+
+
+
+<div class="navbar" [class.minimized]="!isMenuVisible">
+  <!--
+    <button class="toggle-btn" (click)="toggleMenu()">☰</button> 
+    -->
+
+  <ul class="nav-links" [class.minimized]="!isMenuVisible">
+
+    <div class="sidebar-header titulo-header">
+      <h3>Gestión Empresa</h3>
+
+    </div>
+
+    <div class="sidebar-header servicios-header">
+      <h3>Menu</h3>
+    </div>
+
+    <div class="blockLink" [class.active]="currentRoute === '/home'" routerLink="/home">
+      <img src="navbar/home-button.png" alt="Dashboard" class="icon">
+      <li> Home </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/adres'" routerLink="/adres">
+      <img src="navbar/logo_ADRES.png" alt="Adres" class="icon">
+      <li> Adres </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/policivo'" routerLink="/policivo">
+      <img src="navbar/20130516211343!Coat_of_arms_of_colombian_national_police.svg.png" alt="Policivos" class="icon">
+      <li> Policivos </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/ofac'" routerLink="/ofac">
+      <img src="navbar/OFAC.png" alt="Ofac" class="icon">
+      <li> Ofac </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/contraloria'" routerLink="/contraloria">
+      <img src="navbar/logocgr-v.png" alt="Contraloria" class="icon">
+      <li> Contraloria </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/sisben'" routerLink="/sisben">
+      <img src="navbar/sisben.png" alt="Sisben" class="icon">
+      <li> Sisben </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/procuraduria'" routerLink="/procuraduria">
+      <img src="navbar/Procuraduría_General_de_Colombia.svg.png" alt="Procuraduria" class="icon">
+      <li> Procuraduria </li>
+    </div>
+    
+    <div class="blockLink" [class.active]="currentRoute === '/fondo-pension'" routerLink="/fondo-pension">
+      <img src="navbar/1809760.png" alt="Fondo Pension" class="icon">
+      <li> Fondo Pension </li>
+    </div>
+    
+    <div class="blockLink" (click)="unirpdf()">
+      <img src="navbar/pareja.png" alt="Union" class="icon">
+      <li> Union </li>
+    </div>
+    
+    <div class="blockLink cerrar-sesion" routerLink="/" (click)="cerrarSesion()">
+      <img src="navbar/cerrar-sesion.png" alt="Cerrar Sesión" class="icon">
+      <li>Cerrar Sesión</li>
+    </div>
+    
+
+  </ul>
+
+</div>

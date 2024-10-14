@@ -1,0 +1,50 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="SisbenForm">
+
+                        <!-- Select con búsqueda para Tipo de SISBÉN -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de SISBÉN</mat-label>
+                            <input type="text" placeholder="Escribe para buscar" aria-label="Number" matInput
+                                [formControl]="SisbenForm.controls.tipo_sisben" [matAutocomplete]="auto">
+                                
+                            <!-- Autocomplete con filtro -->
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                    {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+
+                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <div class="example-full-width">
+                            <!-- Input de archivo oculto -->
+                            <input type="file" #documentoInputSisben (change)="onFileSelected($event)" accept=".pdf"
+                                hidden>
+
+                            <!-- Botón para seleccionar archivo -->
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Sisben</button>
+
+                            <!-- Mostrar el nombre del archivo seleccionado -->
+                            <span *ngIf="pdfNombreSisben">{{ pdfNombreSisben }}</span>
+                        </div>
+
+                        <!-- Botón para cargar la información -->
+                        <div class="example-full-width">
+                            <button mat-flat-button (click)="cargarInformacionSisben()" style="background: #8dd603;">
+                                Cargar Información
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

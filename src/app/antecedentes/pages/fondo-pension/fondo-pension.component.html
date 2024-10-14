@@ -1,0 +1,54 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="FondoPensionForm">
+
+                        <!-- Select para Estado FondoPension -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado FondoPension</mat-label>
+                            <mat-select formControlName="estadoFondoPension">
+                                <mat-option value="Cumple">Cumple</mat-option>
+                                <mat-option value="No Cumple">No Cumple</mat-option>
+                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
+                                <mat-option value="No Tiene">No Tiene</mat-option>
+                                <mat-option value="No Aplica">No Aplica</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Select del arreglo afpListc -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>AFP</mat-label>
+                            <mat-select formControlName="entidad_fondo_pension">
+                                <mat-option *ngFor="let afp of afpList" [value]="afp">{{ afp }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        
+                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <div class="example-full-width">
+                            <!-- Input de archivo oculto -->
+                            <input type="file" #documentoInputFondoPension (change)="onFileSelected($event)" accept=".pdf"
+                                hidden>
+
+                            <!-- Botón para seleccionar archivo -->
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF FondoPension</button>
+
+                            <!-- Mostrar el nombre del archivo seleccionado -->
+                            <span *ngIf="pdfNombreFondoPension">{{ pdfNombreFondoPension }}</span>
+                        </div>
+
+                        <!-- Botón para cargar la información -->
+                        <div class="example-full-width">
+                            <button mat-flat-button (click)="cargarInformacionFondoPension()"
+                                style="background: #8dd603;">Cargar Información</button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

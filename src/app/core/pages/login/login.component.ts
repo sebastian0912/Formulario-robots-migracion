@@ -118,7 +118,7 @@ export class LoginComponent {
   }
   
 
-  login(): void {
+  async login(): Promise<void> {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -130,7 +130,7 @@ export class LoginComponent {
     };
 
     try {
-      this.authService.login(loginData.email, loginData.password).then(response => {
+      await this.authService.login(loginData.email, loginData.password).then(response => {
         if (response) {
           if (response.jwt === "Contraseña incorrecta") {
             Swal.fire({

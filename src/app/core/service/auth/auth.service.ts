@@ -33,9 +33,8 @@ export class AuthService {
   getUser(): Promise<any> {
 
     const token = this.getToken();
-    const headers = new HttpHeaders().set('Authorization', token ? `${token}` : '');
 
-    return this.http.get(`${this.apiUrl}/usuarios/usuario`, { headers }).toPromise();
+    return this.http.get(`${this.apiUrl}/usuarios/usuario`, ).toPromise();
 
   }
 

@@ -1,0 +1,45 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="OfacForm">
+
+                        <!-- Select para ofac -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado Ofac</mat-label>
+                            <mat-select formControlName="estadoOfac">
+                                <mat-option value="Cumple">Cumple</mat-option>
+                                <mat-option value="No Cumple">No Cumple</mat-option>
+                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <div class="example-full-width">
+                            <!-- Input de archivo oculto -->
+                            <input type="file" #documentoInputOfac (change)="onFileSelected($event)" accept=".pdf"
+                                hidden>
+
+                            <!-- Botón para seleccionar archivo -->
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Ofac</button>
+
+                            <!-- Mostrar el nombre del archivo seleccionado -->
+                            <span *ngIf="pdfNombreOfac">{{ pdfNombreOfac }}</span>
+                        </div>
+
+                        <!-- Botón para cargar la información -->
+                        <div class="example-full-width">
+                            <button mat-flat-button (click)="cargarInformacionOfac()"
+                                style="background: #8dd603;">Cargar Información</button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
