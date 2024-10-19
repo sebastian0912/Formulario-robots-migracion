@@ -153,50 +153,5 @@ export class NavbarLateralComponent implements OnInit {
     localStorage.clear();
   }
 
-  unirpdf(): void {
-    // Mostrar Swal de cargando
-    Swal.fire({
-      title: 'Procesando...',
-      icon: 'info',
-      text: 'Por favor espera mientras se combinan los documentos',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-
-    // Llamar al servicio para combinar los documentos
-    this.antecedentesService.combinarDocumentos().subscribe(
-      (data) => {
-        console.log(data);
-        // Cerrar Swal de cargando
-        Swal.close();
-        if (data.message === 'Documentos combinados y guardados exitosamente') {
-          // Mostrar Swal de éxito
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Documentos combinados y guardados exitosamente',
-            confirmButtonText: 'Aceptar'
-          });
-        }
-
-      },
-      (error) => {
-        // Cerrar Swal de cargando
-        Swal.close();
-
-        // Mostrar Swal de error
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al combinar los documentos. Por favor intenta nuevamente.',
-          confirmButtonText: 'Aceptar'
-        });
-
-        console.log(error);
-      }
-    );
-  }
 
 }

@@ -5,18 +5,36 @@
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="policivoForm">
-
-                        <!-- Select para Estado Policivo -->
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Estado Policivo</mat-label>
-                            <mat-select formControlName="estadoPolicivo">
-                                <mat-option value="Cumple">Cumple</mat-option>
-                                <mat-option value="No Cumple">No Cumple</mat-option>
-                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
-                            </mat-select>
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
                         </mat-form-field>
 
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="policivoForm">
+
+                        <!-- Input para Estado Policivo (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado Policivo</mat-label>
+                            <input matInput formControlName="estadoPolicivo" placeholder="Escribe el estado policivo">
+                        </mat-form-field>                        
 
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
                         <div class="example-full-width">
@@ -33,13 +51,15 @@
 
                         <!-- Botón para cargar la información -->
                         <div class="example-full-width">
-                            <button mat-flat-button (click)="cargarInformacionPolicivo()"
-                                style="background: #8dd603;">Cargar Información</button>
+                            <button mat-flat-button (click)="cargarInformacionPolicivo()" style="background: #8dd603;">
+                                Cargar Información
+                            </button>
                         </div>
 
                     </div>
                 </div>
             </mat-card-content>
         </mat-card>
+
     </div>
 </div>

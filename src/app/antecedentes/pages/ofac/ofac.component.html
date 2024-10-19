@@ -2,20 +2,49 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
+
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                        </mat-form-field>
+
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
                     <div class="buscar" [formGroup]="OfacForm">
 
-                        <!-- Select para ofac -->
+                        <!-- input para ofac -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado Ofac</mat-label>
-                            <mat-select formControlName="estadoOfac">
-                                <mat-option value="Cumple">Cumple</mat-option>
-                                <mat-option value="No Cumple">No Cumple</mat-option>
-                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
-                            </mat-select>
+                            <input matInput formControlName="estadoOfac" placeholder="Estado Ofac">
                         </mat-form-field>
+
+                        
+
+                        <!-- input fecha ofac como campo texto sin datepicker -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha Ofac</mat-label>
+                            <input matInput formControlName="fechaOfac" placeholder="Fecha Ofac">
+                        </mat-form-field>
+
 
 
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->

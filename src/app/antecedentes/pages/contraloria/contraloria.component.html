@@ -2,19 +2,45 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
+
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                        </mat-form-field>
+
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
                     <div class="buscar" [formGroup]="ControlariaForm">
 
-                        <!-- Select para Estado Controlaria -->
+                        <!--Estado Controlaria como input de texto-->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado Controlaria</mat-label>
-                            <mat-select formControlName="estadoControlaria">
-                                <mat-option value="Cumple">Cumple</mat-option>
-                                <mat-option value="No Cumple">No Cumple</mat-option>
-                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
-                            </mat-select>
+                            <input matInput formControlName="estadoControlaria" placeholder="Estado Controlaria">   
+                        </mat-form-field>
+
+                        <!-- Fecha Controlaria como campo de texto sin datepicker -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha Controlaria</mat-label>
+                            <input matInput formControlName="fechaControlaria" placeholder="Fecha Controlaria">
                         </mat-form-field>
 
 

@@ -2,29 +2,51 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
+
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                        </mat-form-field>
+
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
                     <div class="buscar" [formGroup]="FondoPensionForm">
 
-                        <!-- Select para Estado FondoPension -->
+                        <!--Estado FondoPension-->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado FondoPension</mat-label>
-                            <mat-select formControlName="estadoFondoPension">
-                                <mat-option value="Cumple">Cumple</mat-option>
-                                <mat-option value="No Cumple">No Cumple</mat-option>
-                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
-                                <mat-option value="No Tiene">No Tiene</mat-option>
-                                <mat-option value="No Aplica">No Aplica</mat-option>
-                            </mat-select>
+                            <input matInput formControlName="estadoFondoPension" placeholder="Estado FondoPension">
+                        </mat-form-field>
+                        
+                        <!--entidad_fondo_pension-->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Entidad Fondo de Pension</mat-label>
+                            <input matInput formControlName="entidad_fondo_pension" placeholder="Entidad FondoPension">
                         </mat-form-field>
 
-                        <!-- Select del arreglo afpListc -->
+                        <!--Fecha FondoPension-->
                         <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>AFP</mat-label>
-                            <mat-select formControlName="entidad_fondo_pension">
-                                <mat-option *ngFor="let afp of afpList" [value]="afp">{{ afp }}</mat-option>
-                            </mat-select>
+                            <mat-label>Fecha Fondo de Pension</mat-label>
+                            <input matInput formControlName="fecha_fondo_pension" placeholder="Fecha FondoPension">
                         </mat-form-field>
                         
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->

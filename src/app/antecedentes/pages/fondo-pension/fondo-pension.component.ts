@@ -17,6 +17,7 @@ import { NavbarLateralComponent } from '../../../shared/components/navbar-latera
 import { NavbarSuperiorComponent } from '../../../shared/components/navbar-superior/navbar-superior.component';
 import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
+import { HomeService } from '../../../shared/services/home/home.service';
 
 @Component({
   selector: 'app-fondo-pension',
@@ -46,6 +47,8 @@ import { AntecedentesService } from '../../../shared/services/antecedentes/antec
 })
 export class FondoPensionComponent {
   pdfNombreFondoPension: string | null = null;
+  documentoForm: FormGroup;
+
   afpList: string[] = [
     'PORVENIR',
     'COLFONDOS',
@@ -57,13 +60,22 @@ export class FondoPensionComponent {
 
   constructor(
     private antecedentesService: AntecedentesService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private homeService: HomeService
+  ) { 
+        // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
+        this.documentoForm = new FormGroup({
+          tipoDocumento: new FormControl(''),  // Select de tipo de documento
+          numeroDocumento: new FormControl('')  // Input para número de documento
+        });
+  }
   // Formulario reactivo
   FondoPensionForm = new FormGroup({
     estadoFondoPension: new FormControl('', Validators.required),
     entidad_fondo_pension: new FormControl('', Validators.required),
+    fecha_fondo_pension: new FormControl('', Validators.required),
     pdfFondoPension: new FormControl(null),
+    title: new FormControl('')
   });
 
   // Método para manejar la selección de archivo
@@ -71,6 +83,10 @@ export class FondoPensionComponent {
     const file = event.target.files[0];
     if (file) {
       this.pdfNombreFondoPension = file.name;
+      this.FondoPensionForm.patchValue({
+        pdfFondoPension: file,
+        title: file.name  // Actualizar el campo title con el nombre del archivo
+      });
       this.FondoPensionForm.patchValue({ pdfFondoPension: file });
       this.FondoPensionForm.get('pdfFondoPension')?.updateValueAndValidity();
     }
@@ -130,4 +146,51 @@ export class FondoPensionComponent {
       console.log("Formulario FondoPension inválido");
     }
   }
+
+    // Método para manejar el evento del botón de búsqueda
+    buscar() {
+      const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
+      const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
+  
+      console.log(`Tipo de Documento: ${tipoDocumento}`);
+      console.log(`Número de Documento: ${numeroDocumento}`);
+  
+      this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
+        (data) => {
+          console.log(data);
+          // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
+          localStorage.setItem('operario', JSON.stringify({
+            tipoDocumento,
+            numeroDocumento,
+            codigoContrato: data.codigo_contrato
+          }));
+          // Swal de éxito
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Información cargada correctamente',
+            confirmButtonText: 'Aceptar'
+          });
+        },
+        (error) => {
+          // Aquí manejamos el error
+          console.error('Error al obtener la información:', error.message);
+          if (error.message === 'El documento no fue encontrado') {
+            // Puedes mostrar un mensaje personalizado al usuario
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'El documento no fue encontrado.'
+            });
+            return;
+          }
+          // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al obtener la información.'
+          });
+        }
+      );
+    }
 }

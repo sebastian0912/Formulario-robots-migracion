@@ -3,8 +3,11 @@ import { Observable } from 'rxjs';
 import { HttpRequest, HttpEvent } from '@angular/common/http';
 
 export const interceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: any): Observable<HttpEvent<any>> => {
-  // Obtener el token JWT del localStorage con la clave 'token'
-  const jwtToken = localStorage.getItem('token');
+  // Verificar si estamos en un entorno de navegador antes de acceder a localStorage
+  const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
+  // Obtener el token JWT del localStorage con la clave 'token' si estamos en un entorno de navegador
+  const jwtToken = isBrowser ? localStorage.getItem('token') : null;
 
   // Definir las rutas que quieres omitir del interceptor
   const excludedUrls = [

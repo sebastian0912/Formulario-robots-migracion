@@ -121,6 +121,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-card {
     width: 75vw;
     padding: 20px;
+    margin-bottom: 10px;
 }
 
 
@@ -128,4 +129,58 @@ mat-card {
     width: 30%;
     height: 80px;
     margin: 3px 10px -5px 10px;
+}
+
+
+
+
+
+
+/* Estilos de la tabla */
+
+
+
+
+.table-container table {
+    width: 100%;
+    text-align: center;
+}
+
+.table-container th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #5e6a75 !important;
+    color: white;
+    text-align: center;
+    align-items: center;
+}
+
+.mat-table th.mat-header-cell {
+    background-color: #5e6a75 !important;
+}
+
+.mat-table {
+    width: 100%;
+}
+
+.table-container tr:nth-child(even) {
+    background-color: #cccccc;
+}
+
+.table-container tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+
+.filtro {
+    width: 90%;
+}
+
+
+.tabla {
+    margin-top: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }

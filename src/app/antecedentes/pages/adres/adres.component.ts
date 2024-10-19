@@ -17,6 +17,7 @@ import { NavbarLateralComponent } from '../../../shared/components/navbar-latera
 import { NavbarSuperiorComponent } from '../../../shared/components/navbar-superior/navbar-superior.component';
 import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
+import { HomeService } from '../../../shared/services/home/home.service';
 
 @Component({
   selector: 'app-adres',
@@ -49,6 +50,8 @@ export class AdresComponent {
   departamentos = ['Cundinamarca', 'Antioquia', 'Valle del Cauca'];
   municipios = ['Bogotá', 'Medellín', 'Cali'];
   pdfNombre: string | null = null;
+  documentoForm: FormGroup;
+
 
   // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInput') documentoInput!: ElementRef;
@@ -56,8 +59,15 @@ export class AdresComponent {
   // Constructor del componente
   constructor(
     private antecedentesService: AntecedentesService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private homeService: HomeService
+  ) {
+    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
+    this.documentoForm = new FormGroup({
+      tipoDocumento: new FormControl(''),  // Select de tipo de documento
+      numeroDocumento: new FormControl('')  // Input para número de documento
+    });
+  }
 
   // Formulario reactivo
   adresForm = new FormGroup({
@@ -116,9 +126,7 @@ export class AdresComponent {
             text: 'La información ha sido cargada correctamente',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            this.router.navigate(['/home']);
-          });
+          })
         },
         error => {
           Swal.close();  // Cerrar el Swal de carga al recibir un error
@@ -139,6 +147,53 @@ export class AdresComponent {
         confirmButtonText: 'Aceptar'
       });
     }
+  }
+
+  // Método para manejar el evento del botón de búsqueda
+  buscar() {
+    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
+    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
+
+    console.log(`Tipo de Documento: ${tipoDocumento}`);
+    console.log(`Número de Documento: ${numeroDocumento}`);
+
+    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
+      (data) => {
+        console.log(data);
+        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
+        localStorage.setItem('operario', JSON.stringify({
+          tipoDocumento,
+          numeroDocumento,
+          codigoContrato: data.codigo_contrato
+        }));
+        // Swal de éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Información cargada correctamente',
+          confirmButtonText: 'Aceptar'
+        });
+      },
+      (error) => {
+        // Aquí manejamos el error
+        console.error('Error al obtener la información:', error.message);
+        if (error.message === 'El documento no fue encontrado') {
+          // Puedes mostrar un mensaje personalizado al usuario
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El documento no fue encontrado.'
+          });
+          return;
+        }
+        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al obtener la información.'
+        });
+      }
+    );
   }
 
 }

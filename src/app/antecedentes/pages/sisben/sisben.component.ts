@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { NavbarLateralComponent } from '../../../shared/components/navbar-lateral/navbar-lateral.component';
 import { NavbarSuperiorComponent } from '../../../shared/components/navbar-superior/navbar-superior.component';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
+import { HomeService } from '../../../shared/services/home/home.service';
 
 @Component({
   selector: 'app-sisben',
@@ -36,73 +37,46 @@ import { AntecedentesService } from '../../../shared/services/antecedentes/antec
   templateUrl: './sisben.component.html',
   styleUrl: './sisben.component.css'
 })
-export class SisbenComponent implements OnInit {
+export class SisbenComponent  {
   pdfNombreSisben: string | null = null;
+  documentoForm: FormGroup;
 
   // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInputSisben') documentoInputSisben!: ElementRef;
 
-  // Opciones de SISBÉN
-  sisbenOptions: string[] = [
-    'A1', 'A2', 'A3', 'A4', 'A5', // Grupo A
-    'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', // Grupo B
-    'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', // Grupo C
-    'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', 'D20', 'D21' // Grupo D
-  ];
-
-  // Opciones filtradas
-  filteredOptions!: Observable<string[]>;
 
   constructor(
     private antecedentesService: AntecedentesService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private homeService: HomeService
+
+  ) {
+    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
+    this.documentoForm = new FormGroup({
+      tipoDocumento: new FormControl(''),  // Select de tipo de documento
+      numeroDocumento: new FormControl('')  // Input para número de documento
+    });
+  }
 
   // Formulario reactivo para SISBÉN
   SisbenForm = new FormGroup({
     tipo_sisben: new FormControl('', Validators.required), // Control de tipo de SISBÉN
-    estado_sisben: new FormControl({ value: '', disabled: true }, Validators.required), // Control de estado de SISBÉN
-    pdfSisben: new FormControl(null, Validators.required) // Control para archivo PDF
+    estado_sisben: new FormControl('', Validators.required),
+    pdfSisben: new FormControl(null, Validators.required), // Control para archivo PDF
+    title: new FormControl(''),
+    fechaSisben: new FormControl('', Validators.required)
+
   });
-
-  ngOnInit() {
-    // Aplicar el filtro dinámico en el campo 'tipo_sisben'
-    this.filteredOptions = this.SisbenForm.controls.tipo_sisben.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || ''))
-    );
-
-    // Cambiar el estado de SISBÉN automáticamente según el tipo
-    this.SisbenForm.controls.tipo_sisben.valueChanges.subscribe(value => {
-      if (value) {
-        let estado = '';
-        switch (value.charAt(0)) {
-          case 'A':
-            estado = 'Pobreza extrema';
-            break;
-          case 'B':
-            estado = 'Pobreza moderada';
-            break;
-          case 'C':
-            estado = 'Vulnerabilidad';
-            break;
-          case 'D':
-            estado = 'Ni pobre ni vulnerable';
-            break;
-          default:
-            estado = 'Estado desconocido';
-        }
-        // Establecer el estado automáticamente
-        this.SisbenForm.controls.estado_sisben.setValue(estado);
-      }
-    });
-  }
 
   // Método para manejar la selección de archivo
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.pdfNombreSisben = file.name;
+      this.SisbenForm.patchValue({
+        pdfSisben: file,
+        title: file.name  // Actualizar el campo title con el nombre del archivo
+      });
       this.SisbenForm.patchValue({ pdfSisben: file });
       this.SisbenForm.get('pdfSisben')?.updateValueAndValidity();
     }
@@ -164,9 +138,52 @@ export class SisbenComponent implements OnInit {
     }
   }
 
-  // Método para filtrar las opciones
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.sisbenOptions.filter(option => option.toLowerCase().includes(filterValue));
+  // Método para manejar el evento del botón de búsqueda
+  buscar() {
+    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
+    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
+
+    console.log(`Tipo de Documento: ${tipoDocumento}`);
+    console.log(`Número de Documento: ${numeroDocumento}`);
+
+    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
+      (data) => {
+        console.log(data);
+        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
+        localStorage.setItem('operario', JSON.stringify({
+          tipoDocumento,
+          numeroDocumento,
+          codigoContrato: data.codigo_contrato
+        }));
+        // Swal de éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Información cargada correctamente',
+          confirmButtonText: 'Aceptar'
+        });
+      },
+      (error) => {
+        // Aquí manejamos el error
+        console.error('Error al obtener la información:', error.message);
+        if (error.message === 'El documento no fue encontrado') {
+          // Puedes mostrar un mensaje personalizado al usuario
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'El documento no fue encontrado.'
+          });
+          return;
+        }
+        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al obtener la información.'
+        });
+      }
+    );
   }
+
+
 }

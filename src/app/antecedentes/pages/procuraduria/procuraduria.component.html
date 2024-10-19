@@ -5,16 +5,40 @@
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                        </mat-form-field>
+
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
                     <div class="buscar" [formGroup]="ProcuraduriaForm">
 
-                        <!-- Select para Estado Procuraduria -->
+                        <!-- Estado Procuraduria -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado Procuraduria</mat-label>
-                            <mat-select formControlName="estado_procuraduria">
-                                <mat-option value="Cumple">Cumple</mat-option>
-                                <mat-option value="No Cumple">No Cumple</mat-option>
-                                <mat-option value="Sin Buscar">Sin Buscar</mat-option>
-                            </mat-select>
+                            <input matInput formControlName="estado_procuraduria" placeholder="Estado Procuraduria">
+                        </mat-form-field>
+
+                        <!--fecha_procuraduria -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha Procuraduria</mat-label>
+                            <input matInput formControlName="fecha_procuraduria" placeholder="Fecha Procuraduria">
                         </mat-form-field>
 
 

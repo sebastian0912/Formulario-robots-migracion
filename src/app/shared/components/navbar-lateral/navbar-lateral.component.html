@@ -65,7 +65,8 @@
       <li> Fondo Pension </li>
     </div>
     
-    <div class="blockLink" (click)="unirpdf()">
+    <!--union-->
+    <div class="blockLink" [class.active]="currentRoute === '/union-pdf'" routerLink="/union-pdf">
       <img src="navbar/pareja.png" alt="Union" class="icon">
       <li> Union </li>
     </div>

@@ -5,20 +5,47 @@
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
+                    <div class="buscar" [formGroup]="documentoForm">
+                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                        </mat-form-field>
+
+                        <!-- Input para el número de documento -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Número de Documento</mat-label>
+                            <input matInput formControlName="numeroDocumento">
+                        </mat-form-field>
+
+                        <!-- Botón para buscar -->
+                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-content>
+                <div class="search-container">
                     <div class="buscar" [formGroup]="SisbenForm">
 
-                        <!-- Select con búsqueda para Tipo de SISBÉN -->
+                        <!-- Tipo de SISBÉN como campo de texto -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de SISBÉN</mat-label>
-                            <input type="text" placeholder="Escribe para buscar" aria-label="Number" matInput
-                                [formControl]="SisbenForm.controls.tipo_sisben" [matAutocomplete]="auto">
-                                
-                            <!-- Autocomplete con filtro -->
-                            <mat-autocomplete #auto="matAutocomplete">
-                                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                    {{ option }}
-                                </mat-option>
-                            </mat-autocomplete>
+                            <input matInput formControlName="tipo_sisben" placeholder="Tipo de SISBÉN">
+                        </mat-form-field>
+
+                        <!-- Estado SISBÉN como campo de texto -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Estado SISBÉN</mat-label>
+                            <input matInput formControlName="estado_sisben" placeholder="Estado SISBÉN">
+                        </mat-form-field>
+
+                        <!--Fecha Sisben como campo texto sin datepicker-->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Fecha Sisben</mat-label>
+                            <input matInput formControlName="fechaSisben" placeholder="Fecha Sisben">
                         </mat-form-field>
 
 

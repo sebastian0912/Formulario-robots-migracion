@@ -1,0 +1,28 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+        <mat-card >
+            <mat-card-content>
+                <!-- Orden de envio -->
+                <h1 class="title">Orden de union de los pdf de antecedentes</h1>
+                <form [formGroup]="checkboxForm">
+                    <div formArrayName="selectedItems" class="checkbox-grid">
+                        <div class="checkbox-item" *ngFor="let checkbox of checkboxList; let i = index">
+                            <mat-checkbox [formControlName]="i" (change)="onCheckboxChange(i)">
+                                {{ checkbox.descripcion }}
+                            </mat-checkbox>
+                            <!-- Muestra el orden basado en la key -->
+                            <span *ngIf="selectedOrder.includes(checkbox.key)" class="selection-order">
+                                Orden: {{ selectedOrder.indexOf(checkbox.key) + 1 }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button mat-flat-button (click)="onSubmit()">Unir PDF</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

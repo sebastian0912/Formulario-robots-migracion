@@ -1,0 +1,43 @@
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Cuatro columnas */
+    gap: 20px; /* Espacio entre las columnas y filas */
+    align-items: start;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espaciado entre el checkbox y el orden */
+    width: 100%; /* Asegura que el contenedor ocupe el espacio disponible */
+}
+
+.selection-order {
+    background-color: #8dd603;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-left: 10px;
+    white-space: nowrap; /* Evita que el texto del orden se desborde */
+}
+
+mat-checkbox {
+    font-size: 1.1em;
+}
+
+.card-contenedor {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 22pt;
+}

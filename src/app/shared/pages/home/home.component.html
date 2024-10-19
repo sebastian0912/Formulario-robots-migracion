@@ -2,31 +2,90 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
-                        <!-- Select para el tipo de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Tipo de Documento</mat-label>
-                            <mat-select formControlName="tipoDocumento">
-                                <mat-option value="CC">CC</mat-option>
-                                <mat-option value="PET">PET</mat-option>
-                                <mat-option value="PPT">PPT</mat-option>
-                            </mat-select>
-                        </mat-form-field>
 
-                        <!-- Input para el número de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Número de Documento</mat-label>
-                            <input matInput formControlName="numeroDocumento">
-                        </mat-form-field>
+        <div class="tabla">
+            <h1 class="title">Historial de Autorizaciones</h1>
+            <mat-form-field class="filtro">
+                <mat-label>Filtro</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar" #input>
+            </mat-form-field>
+            <div class="table-container">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+                    <!-- Paquete -->
+                    <ng-container matColumnDef="paquete">
+                        <th mat-header-cell *matHeaderCellDef> Paquete </th>
+                        <td mat-cell *matCellDef="let element"> {{element.paquete}} </td>
+                    </ng-container>
+
+                    <!-- Cédula -->
+                    <ng-container matColumnDef="cedula">
+                        <th mat-header-cell *matHeaderCellDef> Cédula </th>
+                        <td mat-cell *matCellDef="let element"> {{element.cedula}} </td>
+                    </ng-container>
+
+                    <!-- Tipo de Documento -->
+                    <ng-container matColumnDef="tipo_documento">
+                        <th mat-header-cell *matHeaderCellDef> Tipo de Documento </th>
+                        <td mat-cell *matCellDef="let element"> {{element.tipo_documento}} </td>
+                    </ng-container>
+
+                    <!-- Estado Adress -->
+                    <ng-container matColumnDef="estado_adress">
+                        <th mat-header-cell *matHeaderCellDef> Estado Adress </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_adress}} </td>
+                    </ng-container>
+
+                    <!-- Estado Contraloría -->
+                    <ng-container matColumnDef="estado_contraloria">
+                        <th mat-header-cell *matHeaderCellDef> Estado Contraloría </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_contraloria}} </td>
+                    </ng-container>
+
+                    <!-- Estado Fondo Pensión -->
+                    <ng-container matColumnDef="estado_fondo_pension">
+                        <th mat-header-cell *matHeaderCellDef> Estado Fondo Pensión </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_fondo_pension}} </td>
+                    </ng-container>
+
+                    <!-- Estado OFAC -->
+                    <ng-container matColumnDef="estado_ofac">
+                        <th mat-header-cell *matHeaderCellDef> Estado OFAC </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_ofac}} </td>
+                    </ng-container>
+
+                    <!-- Estado Policivo -->
+                    <ng-container matColumnDef="estado_policivo">
+                        <th mat-header-cell *matHeaderCellDef> Estado Policivo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_policivo}} </td>
+                    </ng-container>
+
+                    <!-- Estado Procuraduría -->
+                    <ng-container matColumnDef="estado_procuraduria">
+                        <th mat-header-cell *matHeaderCellDef> Estado Procuraduría </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_procuraduria}} </td>
+                    </ng-container>
+
+                    <!-- Estado Sisben -->
+                    <ng-container matColumnDef="estado_sisben">
+                        <th mat-header-cell *matHeaderCellDef> Estado Sisben </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_sisben}} </td>
+                    </ng-container>
+
+                    <!-- Estado Unión -->
+                    <ng-container matColumnDef="estado_union">
+                        <th mat-header-cell *matHeaderCellDef> Estado Unión </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado_union}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="11">No hay datos "{{input.value}}"</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
