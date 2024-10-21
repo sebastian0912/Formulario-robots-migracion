@@ -80,8 +80,15 @@ body {
     background-repeat: no-repeat;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 
 /* Estilos generales de tabla y inputs */
@@ -93,7 +100,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .app-layout app-navbar-lateral {
-    flex: 0 0 280px; /* Ancho fijo para el navbar lateral */
+    flex: 0 0 280px;
+    /* Ancho fijo para el navbar lateral */
 }
 
 .app-layout .contenedor {
@@ -139,6 +147,14 @@ mat-card {
 /* Estilos de la tabla */
 
 
+.table-container {
+    display: flex;
+    flex-direction: column;
+
+    overflow: auto;
+    max-height: 42vh;
+    overflow-y: auto;
+}
 
 
 .table-container table {
@@ -179,6 +195,7 @@ mat-card {
 
 
 .tabla {
+    width: 95%;
     margin-top: 10px;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
