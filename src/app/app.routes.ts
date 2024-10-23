@@ -9,6 +9,8 @@ import { ProcuraduriaComponent } from './antecedentes/pages/procuraduria/procura
 import { SisbenComponent } from './antecedentes/pages/sisben/sisben.component';
 import { HomeComponent } from './shared/pages/home/home.component';
 import { UnionPdfComponent } from './antecedentes/pages/union-pdf/union-pdf.component';
+import { InformeConsultaComponent } from './shared/pages/informe-consulta/informe-consulta.component';
+import { MedidasCorrectivasComponent } from './antecedentes/pages/medidas-correctivas/medidas-correctivas.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -20,5 +22,7 @@ export const routes: Routes = [
     { path: 'policivo', component: PolicivoComponent },
     { path: 'procuraduria', component: ProcuraduriaComponent },
     { path: 'sisben', component: SisbenComponent },
-    { path: 'union-pdf', component: UnionPdfComponent }
+    { path: 'union-pdf', component: UnionPdfComponent },
+    { path: 'informe-consulta', component: InformeConsultaComponent },
+    { path: 'medidas-correctivas', component: MedidasCorrectivasComponent }
 ];

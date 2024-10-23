@@ -3,15 +3,10 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { NavbarLateralComponent } from '../../../shared/components/navbar-lateral/navbar-lateral.component';
 import { NavbarSuperiorComponent } from '../../../shared/components/navbar-superior/navbar-superior.component';
@@ -21,36 +16,27 @@ import { HomeService } from '../../../shared/services/home/home.service';
 import jsPDF from 'jspdf';
 
 @Component({
-  selector: 'app-contraloria',
+  selector: 'app-medidas-correctivas',
   standalone: true,
   imports: [
-    // Componentes compartidos
     NavbarLateralComponent,
     NavbarSuperiorComponent,
-
-    // Módulos de Angular Material
     CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
-    MatSelectModule,
     MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule,
     MatSnackBarModule,
-    MatExpansionModule,
   ],
-  templateUrl: './contraloria.component.html',
-  styleUrls: ['./contraloria.component.css']
+  templateUrl: './medidas-correctivas.component.html',
+  styleUrls: ['./medidas-correctivas.component.css']
 })
-export class ContraloriaComponent {
-  pdfNombreContraloria: string | null = null;
+export class MedidasCorrectivasComponent {
+  pdfNombreMedidas: string | null = null;
 
-  // Utilizar ViewChild para referenciar el input de archivo
-  @ViewChild('documentoInputContraloria') documentoInputContraloria!: ElementRef;
+  @ViewChild('documentoInputMedidas') documentoInputMedidas!: ElementRef;
 
   constructor(
     private antecedentesService: AntecedentesService,
@@ -58,14 +44,34 @@ export class ContraloriaComponent {
     private homeService: HomeService
   ) {}
 
-  // Formulario reactivo
-  contraloriaForm = new FormGroup({
+  // Formulario reactivo para medidas correctivas
+  medidasCorrectivasForm = new FormGroup({
     tipoDocumento: new FormControl('', Validators.required),
     numeroDocumento: new FormControl('', Validators.required),
-    estadoContraloria: new FormControl('', Validators.required),
-    fechaContraloria: new FormControl('', Validators.required),
+    expediente: new FormControl('', Validators.required),
+    formato: new FormControl('', Validators.required),
+    idInfractor: new FormControl('', Validators.required),
+    infractor: new FormControl('', Validators.required),
+    idCustodio: new FormControl('', Validators.required),
+    custodio: new FormControl('', Validators.required),
+    nit: new FormControl('', Validators.required),
+    razonSocial: new FormControl('', Validators.required),
+    idRepresentante: new FormControl('', Validators.required),
+    representante: new FormControl('', Validators.required),
+    fechaMedidasCorrectivas: new FormControl('', Validators.required),
+    departamentoMedidasCorrectivas: new FormControl('', Validators.required),
+    municipioMedidasCorrectivas: new FormControl('', Validators.required),
+    apelacion: new FormControl('', Validators.required),
+    estadoMedidasCorrectivas: new FormControl('', Validators.required),
+    articulo: new FormControl('', Validators.required),
+    numeral: new FormControl('', Validators.required),
+    literal: new FormControl('', Validators.required),
+    localidad: new FormControl('', Validators.required),
+    relatoHechos: new FormControl('', Validators.required),
+    descargos: new FormControl('', Validators.required),
+    numeroDeMedidasCorrectivas: new FormControl('', Validators.required),
     title: new FormControl(''),
-    pdfContraloria: new FormControl<File | null>(null),
+    pdfMedidas: new FormControl<File | null>(null),
   });
 
   // Método para manejar la selección de archivo
@@ -75,12 +81,12 @@ export class ContraloriaComponent {
       if (file.type.startsWith('image/')) {
         this.convertImageToPdf(file);
       } else {
-        this.pdfNombreContraloria = file.name;
-        this.contraloriaForm.patchValue({
-          pdfContraloria: file,
+        this.pdfNombreMedidas = file.name;
+        this.medidasCorrectivasForm.patchValue({
+          pdfMedidas: file,
           title: file.name
         });
-        this.contraloriaForm.get('pdfContraloria')?.updateValueAndValidity();
+        this.medidasCorrectivasForm.get('pdfMedidas')?.updateValueAndValidity();
       }
     }
   }
@@ -97,13 +103,13 @@ export class ContraloriaComponent {
       const pdfBlob = pdf.output('blob');
       const pdfFile = new File([pdfBlob], `${file.name.split('.')[0]}.pdf`, { type: 'application/pdf' });
 
-      this.contraloriaForm.patchValue({
-        pdfContraloria: pdfFile,
+      this.medidasCorrectivasForm.patchValue({
+        pdfMedidas: pdfFile,
         title: pdfFile.name
       });
 
-      this.contraloriaForm.get('pdfContraloria')?.updateValueAndValidity();
-      this.pdfNombreContraloria = pdfFile.name;
+      this.medidasCorrectivasForm.get('pdfMedidas')?.updateValueAndValidity();
+      this.pdfNombreMedidas = pdfFile.name;
     };
 
     reader.readAsDataURL(file);
@@ -111,13 +117,13 @@ export class ContraloriaComponent {
 
   // Método para simular clic en el input de archivo
   seleccionarArchivo() {
-    this.documentoInputContraloria.nativeElement.click();
+    this.documentoInputMedidas.nativeElement.click();
   }
 
   // Método para cargar la información del formulario
-  cargarInformacionContraloria() {
-    if (this.contraloriaForm.valid) {
-      console.log("Información del formulario Contraloría:", this.contraloriaForm.value);
+  cargarInformacionMedidas() {
+    if (this.medidasCorrectivasForm.valid) {
+      console.log("Información del formulario Medidas Correctivas:", this.medidasCorrectivasForm.value);
 
       // Mostrar el Swal de carga antes de la solicitud
       Swal.fire({
@@ -131,30 +137,30 @@ export class ContraloriaComponent {
       });
 
       // Realizar la solicitud al backend
-      this.antecedentesService.cargarContraloria(this.contraloriaForm.value).subscribe(
+      this.antecedentesService.cargarMedidasCorrectivas(this.medidasCorrectivasForm.value).subscribe(
         (response) => {
           console.log("Respuesta del servidor:", response);
 
           // Cerrar el Swal de carga y mostrar el mensaje de éxito con botón de confirmación
           Swal.fire({
             icon: 'success',
-            title: 'Formulario Contraloría cargado',
-            text: 'La información del formulario Contraloría se ha cargado correctamente',
+            title: 'Formulario Medidas Correctivas cargado',
+            text: 'La información del formulario de Medidas Correctivas se ha cargado correctamente',
             confirmButtonText: 'Aceptar'
           }).then((result) => {
             this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/contraloria']);
+              this.router.navigate(['/medidas-correctivas']);
             });
           });
         },
         (error) => {
-          console.error("Error al cargar el formulario Contraloría:", error);
+          console.error("Error al cargar el formulario de Medidas Correctivas:", error);
 
           // Cerrar el Swal de carga y mostrar el mensaje de error
           Swal.fire({
             icon: 'error',
-            title: 'Error al cargar el formulario Contraloría',
-            text: 'Se ha producido un error al cargar la información del formulario Contraloría',
+            title: 'Error al cargar el formulario de Medidas Correctivas',
+            text: 'Se ha producido un error al cargar la información del formulario de Medidas Correctivas',
           });
         }
       );

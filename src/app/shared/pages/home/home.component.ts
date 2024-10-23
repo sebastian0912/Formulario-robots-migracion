@@ -32,39 +32,40 @@ import { MatButtonModule } from '@angular/material/button';
 })
 
 export class HomeComponent implements OnInit {
+
   displayedColumns: string[] = [
-    'paquete',
-    'oficina',
-    'cedula',
-    'tipo_documento',
-    'estado_adress',
-    'estado_contraloria',
-    'estado_fondo_pension',
-    'estado_ofac',
-    'estado_policivo',
-    'estado_procuraduria',
-    'estado_sisben',
-    'estado_union'
+    'hora_registro', 'oficina', 'cedula', 'tipo_documento',
+    'estado_adress', 'apellido_adress', 'entidad_adress', 'pdf_adress', 'fecha_adress',
+    'estado_policivo', 'anotacion_policivo', 'pdf_policivo',
+    'estado_ofac', 'anotacion_ofac', 'pdf_ofac',
+    'estado_contraloria', 'anotacion_contraloria', 'pdf_contraloria',
+    'estado_sisben', 'tipo_sisben', 'pdf_sisben', 'fecha_sisben',
+    'estado_procuraduria', 'anotacion_procuraduria', 'pdf_procuraduria',
+    'estado_fondo_pension', 'entidad_fondo_pension', 'pdf_fondo_pension', 'fecha_fondo_pension',
+    'estado_union', 'union_pdf', 'fecha_union_pdf'
   ];
+
   displayedColumns2: string[] = [
-    'paquete',
-    'oficina',
-    'cedula',
-    'tipo_documento',
-    'estado_adress',
-    'estado_contraloria',
-    'estado_fondo_pension',
-    'estado_ofac',
-    'estado_policivo',
-    'estado_procuraduria',
-    'estado_sisben',
-    'estado_union'
+    'hora_registro', 'oficina', 'cedula', 'tipo_documento',
+    'estado_adress', 'apellido_adress', 'entidad_adress', 'pdf_adress', 'fecha_adress',
+    'estado_policivo', 'anotacion_policivo', 'pdf_policivo',
+    'estado_ofac', 'anotacion_ofac', 'pdf_ofac',
+    'estado_contraloria', 'anotacion_contraloria', 'pdf_contraloria',
+    'estado_sisben', 'tipo_sisben', 'pdf_sisben', 'fecha_sisben',
+    'estado_procuraduria', 'anotacion_procuraduria', 'pdf_procuraduria',
+    'estado_fondo_pension', 'entidad_fondo_pension', 'pdf_fondo_pension', 'fecha_fondo_pension',
+    'estado_union', 'union_pdf', 'fecha_union_pdf'
   ];
   dataSource = new MatTableDataSource<any>([]);
   dataSource2 = new MatTableDataSource<any>([]);
   estados = ['Pendiente', 'Aprobado', 'Rechazado']; // Lista de estados posibles
-  selectedStateField: string = '';
-  selectedStateValue: string = '';
+
+  // FormControls para los filtros
+  contratoControl = new FormControl('');
+  oficinaControl = new FormControl('');
+  cedulaControl = new FormControl('');
+  selectedStateFieldControl = new FormControl('');
+  selectedStateValueControl = new FormControl('');
 
   // Almacena el valor de cada filtro
   filterValues: any = {
@@ -73,6 +74,7 @@ export class HomeComponent implements OnInit {
     cedula: '',
     estado: '',
   };
+
 
   constructor(
     private solicitudesRobotsService: SolicitudesRobotsService
@@ -83,6 +85,9 @@ export class HomeComponent implements OnInit {
     try {
       const data = await this.solicitudesRobotsService.consultarEstadosRobots().toPromise();
 
+      console.log(data.sin_consultar[34]);
+
+
       this.dataSource.data = data.sin_consultar.map((item: any) => ({
         paquete: item.paquete,
         oficina: item.oficina,
@@ -90,13 +95,32 @@ export class HomeComponent implements OnInit {
         tipo_documento: item.tipo_documento,
         estado_adress: item.estado_adress,
         apellido_adress: item.apellido_adress,
-        estado_contraloria: item.estado_contraloria,
-        estado_fondo_pension: item.estado_fondo_pension,
-        estado_ofac: item.estado_ofac,
+        entidad_adress: item.entidad_adress,
+        pdf_adress: item.pdf_adress,
+        fecha_adress: item.fecha_adress,
         estado_policivo: item.estado_policivo,
-        estado_procuraduria: item.estado_procuraduria,
+        anotacion_policivo: item.anotacion_policivo,
+        pdf_policivo: item.pdf_policivo,
+        estado_ofac: item.estado_ofac,
+        anotacion_ofac: item.anotacion_ofac,
+        pdf_ofac: item.pdf_ofac,
+        estado_contraloria: item.estado_contraloria,
+        anotacion_contraloria: item.anotacion_contraloria,
+        pdf_contraloria: item.pdf_contraloria,
         estado_sisben: item.estado_sisben,
+        tipo_sisben: item.tipo_sisben,
+        pdf_sisben: item.pdf_sisben,
+        fecha_sisben: item.fecha_sisben,
+        estado_procuraduria: item.estado_procuraduria,
+        anotacion_procuraduria: item.anotacion_procuraduria,
+        pdf_procuraduria: item.pdf_procuraduria,
+        estado_fondo_pension: item.estado_fondo_pension,
+        entidad_fondo_pension: item.entidad_fondo_pension,
+        pdf_fondo_pension: item.pdf_fondo_pension,
+        fecha_fondo_pension: item.fecha_fondo_pension,
         estado_union: item.estado_union,
+        union_pdf: item.union_pdf,
+        fecha_union_pdf: item.fecha_union_pdf
       }));
       this.dataSource2.data = data.con_registros.map((item: any) => ({
         paquete: item.paquete,
@@ -105,14 +129,37 @@ export class HomeComponent implements OnInit {
         tipo_documento: item.tipo_documento,
         estado_adress: item.estado_adress,
         apellido_adress: item.apellido_adress,
-        estado_contraloria: item.estado_contraloria,
-        estado_fondo_pension: item.estado_fondo_pension,
-        estado_ofac: item.estado_ofac,
+        entidad_adress: item.entidad_adress,
+        pdf_adress: item.pdf_adress,
+        fecha_adress: item.fecha_adress,
         estado_policivo: item.estado_policivo,
-        estado_procuraduria: item.estado_procuraduria,
+        anotacion_policivo: item.anotacion_policivo,
+        pdf_policivo: item.pdf_policivo,
+        estado_ofac: item.estado_ofac,
+        anotacion_ofac: item.anotacion_ofac,
+        pdf_ofac: item.pdf_ofac,
+        estado_contraloria: item.estado_contraloria,
+        anotacion_contraloria: item.anotacion_contraloria,
+        pdf_contraloria: item.pdf_contraloria,
         estado_sisben: item.estado_sisben,
+        tipo_sisben: item.tipo_sisben,
+        pdf_sisben: item.pdf_sisben,
+        fecha_sisben: item.fecha_sisben,
+        estado_procuraduria: item.estado_procuraduria,
+        anotacion_procuraduria: item.anotacion_procuraduria,
+        pdf_procuraduria: item.pdf_procuraduria,
+        estado_fondo_pension: item.estado_fondo_pension,
+        entidad_fondo_pension: item.entidad_fondo_pension,
+        pdf_fondo_pension: item.pdf_fondo_pension,
+        fecha_fondo_pension: item.fecha_fondo_pension,
         estado_union: item.estado_union,
+        union_pdf: item.union_pdf,
+        fecha_union_pdf: item.fecha_union_pdf
       }));
+
+      this.dataSource2.filterPredicate = this.createFilter();
+      this.subscribeToFilters();
+
     } catch (error: any) {
       const errorMessage = error?.error?.message || 'Ocurrió un error desconocido';
       Swal.fire({
@@ -124,16 +171,36 @@ export class HomeComponent implements OnInit {
   }
 
   applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value.trim();
+    this.dataSource.filter = filterValue;
   }
 
-  applyStateFilter(): void {
-    if (this.selectedStateField) {
-      this.filterValues[this.selectedStateField] = this.selectedStateValue.toLowerCase();
-    } else {
-      this.filterValues.estado = ''; // Reinicia el filtro si no hay un campo seleccionado
+  subscribeToFilters(): void {
+    this.contratoControl.valueChanges.subscribe(value => {
+      this.filterValues.contrato = value!.trim().toLowerCase();
+      this.applyFilters();
+    });
+    this.oficinaControl.valueChanges.subscribe(value => {
+      this.filterValues.oficina = value!.trim().toLowerCase();
+      this.applyFilters();
+    });
+    this.cedulaControl.valueChanges.subscribe(value => {
+      this.filterValues.cedula = value!.trim().toLowerCase();
+      this.applyFilters();
+    });
+    this.selectedStateFieldControl.valueChanges.subscribe(() => this.applyFilters());
+    this.selectedStateValueControl.valueChanges.subscribe(() => this.applyFilters());
+  }
+
+  applyFilters(): void {
+    const selectedField = this.selectedStateFieldControl.value;
+    const selectedValue = this.selectedStateValueControl.value;
+
+    // Actualizar el filtro del campo de estado seleccionado
+    if (selectedField) {
+      this.filterValues[selectedField] = selectedValue ? selectedValue.trim().toLowerCase() : '';
     }
+
     this.dataSource2.filter = JSON.stringify(this.filterValues);
   }
 
@@ -144,10 +211,11 @@ export class HomeComponent implements OnInit {
         (!searchTerms.contrato || data.tipo_documento.toLowerCase().includes(searchTerms.contrato)) &&
         (!searchTerms.oficina || data.oficina.toLowerCase().includes(searchTerms.oficina)) &&
         (!searchTerms.cedula || data.cedula.toLowerCase().includes(searchTerms.cedula)) &&
-        (!this.selectedStateField || !this.selectedStateValue ||
-          (data[this.selectedStateField]?.toLowerCase() === this.selectedStateValue.toLowerCase()))
+        (!this.selectedStateFieldControl.value || !this.selectedStateValueControl.value ||
+          (data[this.selectedStateFieldControl.value]?.toLowerCase() === this.selectedStateValueControl.value.toLowerCase()))
       );
     };
   }
-
 }
+
+

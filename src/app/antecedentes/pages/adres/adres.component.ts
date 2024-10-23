@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,16 +18,14 @@ import { NavbarSuperiorComponent } from '../../../shared/components/navbar-super
 import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
 import { HomeService } from '../../../shared/services/home/home.service';
+import { jsPDF } from 'jspdf'; // Importar jsPDF para convertir imágenes a PDF
 
 @Component({
   selector: 'app-adres',
   standalone: true,
   imports: [
-    // Componentes compartidos
     NavbarLateralComponent,
     NavbarSuperiorComponent,
-
-    // Módulos de Angular Material
     CommonModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -46,14 +44,29 @@ import { HomeService } from '../../../shared/services/home/home.service';
   styleUrls: ['./adres.component.css']
 })
 export class AdresComponent {
-  // Datos de los selectores de departamento y municipio (ejemplo)
   departamentos = ['Cundinamarca', 'Antioquia', 'Valle del Cauca'];
   municipios = ['Bogotá', 'Medellín', 'Cali'];
   pdfNombre: string | null = null;
-  documentoForm: FormGroup;
+  documentoForm!: FormGroup;
 
+  adresForm = new FormGroup({
+    tipoDocumento: new FormControl('', Validators.required),
+    numeroDocumento: new FormControl('', Validators.required),
+    nombre: new FormControl(''),
+    apellido: new FormControl(''),
+    departamento: new FormControl(''),
+    municipio: new FormControl(''),
+    estado: new FormControl(''),
+    entidad: new FormControl(''),
+    regimen: new FormControl(''),
+    fechaAfiliacionEfectiva: new FormControl(''),
+    fechaFinalizacionAfiliacion: new FormControl(''),
+    tipoAfiliacion: new FormControl(''),
+    fechaAdress: new FormControl(''),
+    pdfDocumento: new FormControl<File | null>(null),  // Permitir que sea un archivo o null
+    title: new FormControl('')
+  });
 
-  // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInput') documentoInput!: ElementRef;
 
   // Constructor del componente
@@ -62,74 +75,110 @@ export class AdresComponent {
     private router: Router,
     private homeService: HomeService
   ) {
-    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
+    // Inicializamos el formulario de documento
     this.documentoForm = new FormGroup({
-      tipoDocumento: new FormControl(''),  // Select de tipo de documento
-      numeroDocumento: new FormControl('')  // Input para número de documento
+      tipoDocumento: new FormControl('', Validators.required),
+      numeroDocumento: new FormControl('', Validators.required)
     });
+
+    // Inicializamos el formulario de adres
+    this.adresForm = new FormGroup({
+      tipoDocumento: new FormControl('', Validators.required),
+      numeroDocumento: new FormControl('', Validators.required),
+      nombre: new FormControl('',),
+      apellido: new FormControl('',),
+      departamento: new FormControl('',),
+      municipio: new FormControl('',),
+      estado: new FormControl('',),
+      entidad: new FormControl('',),
+      regimen: new FormControl('',),
+      fechaAfiliacionEfectiva: new FormControl('',),
+      fechaFinalizacionAfiliacion: new FormControl('',),
+      tipoAfiliacion: new FormControl('',),
+      fechaAdress: new FormControl('',),
+      pdfDocumento: new FormControl<File | null>(null,),
+      title: new FormControl('',)
+    });
+
   }
 
-  // Formulario reactivo
-  adresForm = new FormGroup({
-    departamento: new FormControl('',),
-    municipio: new FormControl('',),
-    estado: new FormControl('',),
-    entidad: new FormControl('',),
-    regimen: new FormControl('',),
-    fechaAfiliacionEfectiva: new FormControl('',),
-    fechaFinalizacionAfiliacion: new FormControl(''),
-    tipoAfiliacion: new FormControl('',),
-    fechaAdress: new FormControl('',),
-    pdfDocumento: new FormControl(null),
-    title: new FormControl('')
-  });
 
   // Método para manejar la selección de archivo
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pdfNombre = file.name;
-      this.adresForm.patchValue({
-        pdfDocumento: file,
-        title: file.name  // Actualizar el campo title con el nombre del archivo
-      });
-      this.adresForm.get('pdfDocumento')?.updateValueAndValidity();
-      this.adresForm.get('title')?.updateValueAndValidity();
+      if (file.type.startsWith('image/')) {
+        this.convertImageToPdf(file);
+      } else {
+        this.adresForm.patchValue({
+          pdfDocumento: file,
+          title: file.name
+        });
+        this.adresForm.get('pdfDocumento')?.updateValueAndValidity();
+        this.adresForm.get('title')?.updateValueAndValidity();
+        this.pdfNombre = file.name;
+      }
     }
   }
 
-  // Método para simular clic en el input de archivo
+  // Método para convertir una imagen a PDF
+  convertImageToPdf(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const imageData = e.target.result;
+
+      const pdf = new jsPDF();
+      pdf.addImage(imageData, 'JPEG', 10, 10, 180, 160);
+
+      const pdfBlob = pdf.output('blob');
+      const pdfFile = new File([pdfBlob], `${file.name.split('.')[0]}.pdf`, { type: 'application/pdf' });
+
+      this.adresForm.patchValue({
+        pdfDocumento: pdfFile,
+        title: pdfFile.name
+      });
+      this.adresForm.get('pdfDocumento')?.updateValueAndValidity();
+      this.adresForm.get('title')?.updateValueAndValidity();
+      this.pdfNombre = pdfFile.name;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   seleccionarArchivo() {
     this.documentoInput.nativeElement.click();
   }
 
-  // Método para cargar la información del formulario
   cargarInformacion() {
     if (this.adresForm.valid) {
-      // Mostrar Swal de carga
       Swal.fire({
         title: 'Cargando',
         text: 'Por favor espera mientras se carga la información...',
         icon: 'info',
         allowOutsideClick: false,
         didOpen: () => {
-          Swal.showLoading();  // Mostrar spinner de carga
+          Swal.showLoading();
         }
       });
 
-      // Llamada al servicio
       this.antecedentesService.cargarAdres(this.adresForm.value).subscribe(
         response => {
-          Swal.close();  // Cerrar el Swal de carga al recibir la respuesta
+          console.log(response);
+          Swal.close();
           Swal.fire({
             title: 'Información cargada',
             text: 'La información ha sido cargada correctamente',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          })
+          }).then((result) => {
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/adres']);
+            });
+          });
         },
         error => {
-          Swal.close();  // Cerrar el Swal de carga al recibir un error
+          console.error(error);
+          Swal.close();
           console.error(error);
           Swal.fire({
             title: 'Error',
@@ -147,53 +196,6 @@ export class AdresComponent {
         confirmButtonText: 'Aceptar'
       });
     }
-  }
-
-  // Método para manejar el evento del botón de búsqueda
-  buscar() {
-    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
-    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
-
-    console.log(`Tipo de Documento: ${tipoDocumento}`);
-    console.log(`Número de Documento: ${numeroDocumento}`);
-
-    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
-      (data) => {
-        console.log(data);
-        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
-        localStorage.setItem('operario', JSON.stringify({
-          tipoDocumento,
-          numeroDocumento,
-          codigoContrato: data.codigo_contrato
-        }));
-        // Swal de éxito
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Información cargada correctamente',
-          confirmButtonText: 'Aceptar'
-        });
-      },
-      (error) => {
-        // Aquí manejamos el error
-        console.error('Error al obtener la información:', error.message);
-        if (error.message === 'El documento no fue encontrado') {
-          // Puedes mostrar un mensaje personalizado al usuario
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El documento no fue encontrado.'
-          });
-          return;
-        }
-        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al obtener la información.'
-        });
-      }
-    );
   }
 
 }

@@ -6,7 +6,7 @@
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
+                    <div class="buscar" [formGroup]="ofacForm">
                         <!-- Input para el tipo de documento (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de Documento</mat-label>
@@ -19,25 +19,13 @@
                             <input matInput formControlName="numeroDocumento">
                         </mat-form-field>
 
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-        
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="OfacForm">
-
                         <!-- input para ofac -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado Ofac</mat-label>
                             <input matInput formControlName="estadoOfac" placeholder="Estado Ofac">
                         </mat-form-field>
 
-                        
+
 
                         <!-- input fecha ofac como campo texto sin datepicker -->
                         <mat-form-field appearance="fill" class="example-full-width">
@@ -50,8 +38,8 @@
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
                         <div class="example-full-width">
                             <!-- Input de archivo oculto -->
-                            <input type="file" #documentoInputOfac (change)="onFileSelected($event)" accept=".pdf"
-                                hidden>
+                            <input type="file" #documentoInputOfac (change)="onFileSelected($event)"
+                                accept=".pdf, image/*" hidden>
 
                             <!-- Botón para seleccionar archivo -->
                             <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Ofac</button>

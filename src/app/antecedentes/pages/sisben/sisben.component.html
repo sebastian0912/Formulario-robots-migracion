@@ -2,10 +2,13 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
+
+
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
+                    <div class="buscar" [formGroup]="SisbenForm">
+
                         <!-- Input para el tipo de documento (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de Documento</mat-label>
@@ -17,18 +20,6 @@
                             <mat-label>Número de Documento</mat-label>
                             <input matInput formControlName="numeroDocumento">
                         </mat-form-field>
-
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="SisbenForm">
 
                         <!-- Tipo de SISBÉN como campo de texto -->
                         <mat-form-field appearance="fill" class="example-full-width">
@@ -52,7 +43,7 @@
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
                         <div class="example-full-width">
                             <!-- Input de archivo oculto -->
-                            <input type="file" #documentoInputSisben (change)="onFileSelected($event)" accept=".pdf"
+                            <input type="file" #documentoInputSisben (change)="onFileSelected($event)" accept=".pdf, image/*"
                                 hidden>
 
                             <!-- Botón para seleccionar archivo -->

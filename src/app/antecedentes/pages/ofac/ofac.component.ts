@@ -18,6 +18,7 @@ import { NavbarSuperiorComponent } from '../../../shared/components/navbar-super
 import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
 import { HomeService } from '../../../shared/services/home/home.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-ofac',
@@ -43,11 +44,10 @@ import { HomeService } from '../../../shared/services/home/home.service';
     MatExpansionModule,
   ],
   templateUrl: './ofac.component.html',
-  styleUrl: './ofac.component.css'
+  styleUrls: ['./ofac.component.css']
 })
 export class OfacComponent {
   pdfNombreOfac: string | null = null;
-  documentoForm: FormGroup;
 
   // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInputOfac') documentoInputOfac!: ElementRef;
@@ -56,34 +56,56 @@ export class OfacComponent {
     private antecedentesService: AntecedentesService,
     private router: Router,
     private homeService: HomeService
-  ) {
-    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
-    this.documentoForm = new FormGroup({
-      tipoDocumento: new FormControl(''),  // Select de tipo de documento
-      numeroDocumento: new FormControl('')  // Input para número de documento
-    });
-  }
+  ) {}
+
   // Formulario reactivo
-  OfacForm = new FormGroup({
+  ofacForm = new FormGroup({
+    tipoDocumento: new FormControl('', Validators.required),  
+    numeroDocumento: new FormControl('', Validators.required),  
     estadoOfac: new FormControl('', Validators.required),
     fechaOfac: new FormControl('', Validators.required),
-    pdfOfac: new FormControl(null),
+    pdfOfac: new FormControl<File | null>(null),
     title: new FormControl('')
-
   });
 
   // Método para manejar la selección de archivo
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pdfNombreOfac = file.name;
-      this.OfacForm.patchValue({
-        pdfOfac: file,
-        title: file.name  // Actualizar el campo title con el nombre del archivo
-      });
-      this.OfacForm.patchValue({ pdfOfac: file });
-      this.OfacForm.get('pdfOfac')?.updateValueAndValidity();
+      if (file.type.startsWith('image/')) {
+        this.convertImageToPdf(file);
+      } else {
+        this.pdfNombreOfac = file.name;
+        this.ofacForm.patchValue({
+          pdfOfac: file,
+          title: file.name
+        });
+        this.ofacForm.get('pdfOfac')?.updateValueAndValidity();
+      }
     }
+  }
+
+  // Método para convertir una imagen a PDF
+  convertImageToPdf(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const imageData = e.target.result;
+
+      const pdf = new jsPDF();
+      pdf.addImage(imageData, 'JPEG', 10, 10, 180, 160);
+
+      const pdfBlob = pdf.output('blob');
+      const pdfFile = new File([pdfBlob], `${file.name.split('.')[0]}.pdf`, { type: 'application/pdf' });
+
+      this.ofacForm.patchValue({
+        pdfOfac: pdfFile,
+        title: pdfFile.name
+      });
+      this.ofacForm.get('pdfOfac')?.updateValueAndValidity();
+      this.pdfNombreOfac = pdfFile.name;
+    };
+
+    reader.readAsDataURL(file);
   }
 
   // Método para simular clic en el input de archivo
@@ -93,8 +115,8 @@ export class OfacComponent {
 
   // Método para cargar la información del formulario
   cargarInformacionOfac() {
-    if (this.OfacForm.valid) {
-      console.log("Información del formulario ofac:", this.OfacForm.value);
+    if (this.ofacForm.valid) {
+      console.log("Información del formulario OFAC:", this.ofacForm.value);
 
       // Mostrar el Swal de carga antes de la solicitud
       Swal.fire({
@@ -108,7 +130,7 @@ export class OfacComponent {
       });
 
       // Realizar la solicitud al backend
-      this.antecedentesService.cargarOfac(this.OfacForm.value).subscribe(
+      this.antecedentesService.cargarOfac(this.ofacForm.value).subscribe(
         (response) => {
           console.log("Respuesta del servidor:", response);
 
@@ -117,12 +139,11 @@ export class OfacComponent {
             icon: 'success',
             title: 'Formulario OFAC cargado',
             text: 'La información del formulario OFAC se ha cargado correctamente',
-            confirmButtonText: 'Aceptar'  // Mostrar botón "Aceptar"
+            confirmButtonText: 'Aceptar'
           }).then((result) => {
-            if (result.isConfirmed) {
-              // Redirigir cuando el usuario haga clic en "Aceptar"
-              this.router.navigate(['/home']);
-            }
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/ofac']);
+            });
           });
         },
         (error) => {
@@ -137,55 +158,12 @@ export class OfacComponent {
         }
       );
     } else {
-      console.log("Formulario OFAC inválido");
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario inválido',
+        text: 'Por favor, completa todos los campos requeridos.',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
-
-  // Método para manejar el evento del botón de búsqueda
-  buscar() {
-    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
-    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
-
-    console.log(`Tipo de Documento: ${tipoDocumento}`);
-    console.log(`Número de Documento: ${numeroDocumento}`);
-
-    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
-      (data) => {
-        console.log(data);
-        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
-        localStorage.setItem('operario', JSON.stringify({
-          tipoDocumento,
-          numeroDocumento,
-          codigoContrato: data.codigo_contrato
-        }));
-        // Swal de éxito
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Información cargada correctamente',
-          confirmButtonText: 'Aceptar'
-        });
-      },
-      (error) => {
-        // Aquí manejamos el error
-        console.error('Error al obtener la información:', error.message);
-        if (error.message === 'El documento no fue encontrado') {
-          // Puedes mostrar un mensaje personalizado al usuario
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El documento no fue encontrado.'
-          });
-          return;
-        }
-        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al obtener la información.'
-        });
-      }
-    );
-  }
-
 }

@@ -1,11 +1,12 @@
 <div class="app-layout">
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
-        <app-navbar-superior></app-navbar-superior>
+        <app-navbar-superior></app-navbar-superior>    
+        
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
+                    <div class="buscar" [formGroup]="adresForm">
                         <!-- Input para el tipo de documento (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de Documento</mat-label>
@@ -17,19 +18,20 @@
                             <mat-label>Número de Documento</mat-label>
                             <input matInput formControlName="numeroDocumento">
                         </mat-form-field>
-        
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-        
-        
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="adresForm">
+
+                        <!-- nombre -->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="nombre" placeholder="Escribe el nombre">
+                        </mat-form-field>
+
+                        <!--apellido-->
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Apellido</mat-label>
+                            <input matInput formControlName="apellido" placeholder="Escribe el apellido">
+                        </mat-form-field>
+
+
                         <!-- Input para Departamento -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Departamento</mat-label>
@@ -87,7 +89,7 @@
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
                         <div class="example-full-width">
                             <!-- Input de archivo oculto -->
-                            <input type="file" #documentoInput (change)="onFileSelected($event)" accept=".pdf" hidden>
+                            <input type="file" #documentoInput (change)="onFileSelected($event)" accept=".pdf, image/*" hidden>
         
                             <!-- Botón para seleccionar archivo -->
                             <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF</button>

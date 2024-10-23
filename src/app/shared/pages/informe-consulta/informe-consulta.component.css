@@ -1,0 +1,47 @@
+.title{
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+
+.header {
+    background-color: orange;
+    font-size: 18px;
+    font-weight: lighter;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.column {
+    background-color: #f0c040;
+    padding: 10px;
+}
+
+.value {
+    text-align: center;
+    font-weight: bold;
+}
+
+.low {
+    background-color: #00cc00;
+    /* Verde para valores bajos */
+    color: #000;
+}
+
+.medium {
+    background-color: #ffff00;
+    /* Amarillo para valores medios */
+    color: #000;
+}
+
+.high {
+    background-color: #ff0000;
+    /* Rojo para valores altos */
+    color: #fff;
+}
+
+.warning {
+    background-color: #ff6666;
+}

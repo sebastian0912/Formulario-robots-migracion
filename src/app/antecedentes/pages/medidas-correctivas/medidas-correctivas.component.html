@@ -1,0 +1,180 @@
+<div class="app-layout">
+  <app-navbar-lateral></app-navbar-lateral>
+  <div class="contenedor">
+    <app-navbar-superior></app-navbar-superior>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="search-container">
+          <div class="buscar" [formGroup]="medidasCorrectivasForm">
+
+            <!-- Input para el tipo de documento (reemplazado el select) -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Tipo de Documento</mat-label>
+              <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+            </mat-form-field>
+
+            <!-- Input para el número de documento -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Número de Documento</mat-label>
+              <input matInput formControlName="numeroDocumento">
+            </mat-form-field>
+
+            <!-- Input para Expediente -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Expediente</mat-label>
+              <input matInput formControlName="expediente" placeholder="Escribe el expediente">
+            </mat-form-field>
+
+            <!-- Input para Formato -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Formato</mat-label>
+              <input matInput formControlName="formato" placeholder="Escribe el formato">
+            </mat-form-field>
+
+            <!-- Input para ID Infractor -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>ID Infractor</mat-label>
+              <input matInput formControlName="idInfractor" placeholder="Escribe el ID del infractor">
+            </mat-form-field>
+
+            <!-- Input para Infractor -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Infractor</mat-label>
+              <input matInput formControlName="infractor" placeholder="Escribe el nombre del infractor">
+            </mat-form-field>
+
+            <!-- Input para ID Custodio -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>ID Custodio</mat-label>
+              <input matInput formControlName="idCustodio" placeholder="Escribe el ID del custodio">
+            </mat-form-field>
+
+            <!-- Input para Custodio -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Custodio</mat-label>
+              <input matInput formControlName="custodio" placeholder="Escribe el nombre del custodio">
+            </mat-form-field>
+
+            <!-- Input para NIT -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>NIT</mat-label>
+              <input matInput formControlName="nit" placeholder="Escribe el NIT">
+            </mat-form-field>
+
+            <!-- Input para Razón Social -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Razón Social</mat-label>
+              <input matInput formControlName="razonSocial" placeholder="Escribe la razón social">
+            </mat-form-field>
+
+            <!-- Input para ID Representante -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>ID Representante</mat-label>
+              <input matInput formControlName="idRepresentante" placeholder="Escribe el ID del representante">
+            </mat-form-field>
+
+            <!-- Input para Representante -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Representante</mat-label>
+              <input matInput formControlName="representante" placeholder="Escribe el nombre del representante">
+            </mat-form-field>
+
+            <!-- Input para Fecha Medidas Correctivas -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Fecha Medidas Correctivas</mat-label>
+              <input matInput formControlName="fechaMedidasCorrectivas" placeholder="DD/MM/YYYY">
+            </mat-form-field>
+
+            <!-- Input para Departamento Medidas Correctivas -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Departamento</mat-label>
+              <input matInput formControlName="departamentoMedidasCorrectivas" placeholder="Escribe el departamento">
+            </mat-form-field>
+
+            <!-- Input para Municipio Medidas Correctivas -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Municipio</mat-label>
+              <input matInput formControlName="municipioMedidasCorrectivas" placeholder="Escribe el municipio">
+            </mat-form-field>
+
+            <!-- Input para Apelación -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Apelación</mat-label>
+              <input matInput formControlName="apelacion" placeholder="Escribe la apelación">
+            </mat-form-field>
+
+            <!-- Input para Estado Medidas Correctivas -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Estado</mat-label>
+              <input matInput formControlName="estadoMedidasCorrectivas" placeholder="Escribe el estado">
+            </mat-form-field>
+
+            <!-- Input para Artículo -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Artículo</mat-label>
+              <input matInput formControlName="articulo" placeholder="Escribe el artículo">
+            </mat-form-field>
+
+            <!-- Input para Numeral -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Numeral</mat-label>
+              <input matInput formControlName="numeral" placeholder="Escribe el numeral">
+            </mat-form-field>
+
+            <!-- Input para Literal -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Literal</mat-label>
+              <input matInput formControlName="literal" placeholder="Escribe el literal">
+            </mat-form-field>
+
+            <!-- Input para Localidad -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Localidad</mat-label>
+              <input matInput formControlName="localidad" placeholder="Escribe la localidad">
+            </mat-form-field>
+
+            <!-- Input para Relato Hechos -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Relato de los Hechos</mat-label>
+              <textarea matInput formControlName="relatoHechos"
+                placeholder="Escribe el relato de los hechos"></textarea>
+            </mat-form-field>
+
+            <!-- Input para Descargos -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Descargos</mat-label>
+              <textarea matInput formControlName="descargos" placeholder="Escribe los descargos"></textarea>
+            </mat-form-field>
+
+            <!-- Input para Número de Medidas Correctivas -->
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Número de Medidas Correctivas</mat-label>
+              <input matInput formControlName="numeroDeMedidasCorrectivas"
+                placeholder="Escribe el número de medidas correctivas">
+            </mat-form-field>
+
+            <!-- Botón para cargar PDF del Documento de Medidas Correctivas -->
+            <div class="example-full-width">
+              <!-- Input de archivo oculto -->
+              <input type="file" #documentoInputMedidas (change)="onFileSelected($event)" accept=".pdf, image/*" hidden>
+
+              <!-- Botón para seleccionar archivo -->
+              <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Medidas Correctivas</button>
+
+              <!-- Mostrar el nombre del archivo seleccionado -->
+              <span *ngIf="pdfNombreMedidas">{{ pdfNombreMedidas }}</span>
+            </div>
+
+            <!-- Botón para cargar la información -->
+            <div class="example-full-width">
+              <button mat-flat-button (click)="cargarInformacionMedidas()" style="background: #8dd603;">Cargar
+                Información</button>
+            </div>
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

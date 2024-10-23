@@ -29,6 +29,12 @@
       <img src="navbar/home-button.png" alt="Dashboard" class="icon">
       <li> Home </li>
     </div>
+
+    <!-- informe-consulta -->
+    <div class="blockLink" [class.active]="currentRoute === '/informe-consulta'" routerLink="/informe-consulta">
+      <img src="navbar/publicacion.png" alt="Informe Consulta" class="icon">
+      <li> Informe Consulta </li>
+    </div>
     
     <div class="blockLink" [class.active]="currentRoute === '/adres'" routerLink="/adres">
       <img src="navbar/logo_ADRES.png" alt="Adres" class="icon">
@@ -63,6 +69,13 @@
     <div class="blockLink" [class.active]="currentRoute === '/fondo-pension'" routerLink="/fondo-pension">
       <img src="navbar/1809760.png" alt="Fondo Pension" class="icon">
       <li> Fondo Pension </li>
+    </div>
+
+    <!--medidas-correctivas-->
+
+    <div class="blockLink" [class.active]="currentRoute === '/medidas-correctivas'" routerLink="/medidas-correctivas">
+      <img src="navbar/correcto.png" alt="Medidas Correctivas" class="icon">
+      <li> Medidas Correctivas </li>
     </div>
     
     <!--union-->

@@ -16,7 +16,7 @@ export class AntecedentesService {
   tipoDocumento: string | null = null;
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
-    this.actualizarDatos();  // Inicializar las variables al crear la instancia del servicio
+
   }
 
   // Método para manejar los errores de la solicitud HTTP
@@ -24,37 +24,16 @@ export class AntecedentesService {
     return throwError(() => new Error('Error en la solicitud: ' + error.message));
   }
 
-  // Método para actualizar las variables desde el localStorage
-  actualizarDatos() {
-    if (isPlatformBrowser(this.platformId)) {
-      const operario = localStorage.getItem('operario');  // Obtener el objeto 'operario'
-      if (operario) {
-        const operarioData = JSON.parse(operario);  // Parsear el objeto 'operario' desde JSON
-        this.numeroDocumento = operarioData.numeroDocumento || null;
-        this.codigoContrato = operarioData.codigoContrato || null;
-        this.tipoDocumento = operarioData.tipoDocumento || null;
-      }
-    }
-  }
-
-
 
   // Cargar adres
   cargarAdres(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
-
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
-
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('departamento', datos.departamento);
     formData.append('municipio', datos.municipio);
     formData.append('estado', datos.estado);
@@ -65,6 +44,8 @@ export class AntecedentesService {
     formData.append('tipoAfiliacion', datos.tipoAfiliacion);
     formData.append('fechaAdress', datos.fechaAdress);
     formData.append('title', datos.title);
+    formData.append('nombre', datos.nombre);
+    formData.append('apellido', datos.apellido);
 
     // Añadir el archivo PDF si existe
     if (datos.pdfDocumento) {
@@ -85,20 +66,15 @@ export class AntecedentesService {
 
   // Cargar datos de policivos
   cargarPolicivo(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
 
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('estado_policivo', datos.estadoPolicivo);  // Estado Policivo
     formData.append('title', datos.title);
 
@@ -121,20 +97,14 @@ export class AntecedentesService {
 
   // Cargar datos de ofac
   cargarOfac(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
-
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('estado_ofac', datos.estadoOfac);  // Estado OFAC
     formData.append('title', datos.title);
     formData.append('fecha_ofac', datos.fechaOfac);
@@ -157,28 +127,22 @@ export class AntecedentesService {
   }
 
   // Cargar datos de Controlaria
-  cargarControlaria(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
-
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
+  cargarContraloria(datos: any): Observable<any> {
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
-    formData.append('estado_contraloria', datos.estadoControlaria);  // Estado Controlaria
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
+    formData.append('estado_contraloria', datos.estadoContraloria);  // Estado Controlaria
     formData.append('title', datos.title);
-    formData.append('fecha_contraloria', datos.fechaControlaria);
+    formData.append('fecha_contraloria', datos.fechaContraloria);
 
     // Añadir el archivo PDF si existe
-    if (datos.pdfControlaria) {
-      formData.append('pdfControlaria', datos.pdfControlaria);
+    if (datos.pdfContraloria) {
+      formData.append('pdfContraloria', datos.pdfContraloria);
     }
 
     // Imprimir cada campo de FormData usando forEach
@@ -195,20 +159,15 @@ export class AntecedentesService {
 
   // Cargar datos de Sisben
   cargarSisben(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
 
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('estado_sisben', datos.estado_sisben);  // Estado Sisben
     formData.append('tipo_sisben', datos.tipo_sisben);  // Tipo Sisben
     formData.append('title', datos.title);  // Nivel Sisben
@@ -234,20 +193,15 @@ export class AntecedentesService {
 
   // Cargar datos de Procuraduria
   cargarProcuraduria(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
 
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('estado_procuraduria', datos.estado_procuraduria);  // Estado Procuraduria
     formData.append('title', datos.title);
     formData.append('fecha_procuraduria', datos.fecha_procuraduria);  // Fecha Procuraduria
@@ -270,20 +224,15 @@ export class AntecedentesService {
 
   // Cargar fondos de pension
   cargarFondoPension(datos: any): Observable<any> {
-    // Asegurarse de que las variables estén actualizadas
-    this.actualizarDatos();
 
-    if (!this.numeroDocumento || !this.codigoContrato || !this.tipoDocumento) {
-      return throwError(() => new Error('No se encontraron los datos necesarios en el localStorage'));
-    }
 
     // Crear una instancia de FormData para enviar archivos
     const formData = new FormData();
 
     // Añadir los campos al FormData
-    formData.append('cedula', this.numeroDocumento);  // Asignar el numeroDocumento actualizado
-    formData.append('tipo_documento', this.tipoDocumento);  // Asignar el tipoDocumento actualizado
-    formData.append('numero_contrato', this.codigoContrato);  // Asignar el codigoContrato actualizado
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+
     formData.append('estado_fondo_pension', datos.estadoFondoPension);  // Estado Fondo Pension
     formData.append('entidad_fondo_pension', datos.entidad_fondo_pension);  // Entidad Fondo Pension
     formData.append('title', datos.title);
@@ -327,6 +276,55 @@ export class AntecedentesService {
     );
   }
 
+
+  // Cargar datos de Medidas Correctivas
+  cargarMedidasCorrectivas(datos: any): Observable<any> {
+    // Crear una instancia de FormData para enviar archivos
+    const formData = new FormData();
+
+    // Añadir los campos al FormData
+    formData.append('cedula', datos.numeroDocumento);  // Asignar el numeroDocumento actualizado
+    formData.append('tipo_documento', datos.tipoDocumento);  // Asignar el tipoDocumento actualizado
+    formData.append('expediente', datos.expediente);
+    formData.append('formato', datos.formato);
+    formData.append('id_infractor', datos.idInfractor);
+    formData.append('infractor', datos.infractor);
+    formData.append('id_custodio', datos.idCustodio);
+    formData.append('custodio', datos.custodio);
+    formData.append('nit', datos.nit);
+    formData.append('razon_social', datos.razonSocial);
+    formData.append('id_representante', datos.idRepresentante);
+    formData.append('representante', datos.representante);
+    formData.append('fecha_medidas_correctivas', datos.fechaMedidasCorrectivas);
+    formData.append('departamento_medidas_correctivas', datos.departamentoMedidasCorrectivas);
+    formData.append('municipio_medidas_correctivas', datos.municipioMedidasCorrectivas);
+    formData.append('apelacion', datos.apelacion);
+    formData.append('estado_medidas_correctivas', datos.estadoMedidasCorrectivas);
+    formData.append('articulo', datos.articulo);
+    formData.append('numeral', datos.numeral);
+    formData.append('literal', datos.literal);
+    formData.append('localidad', datos.localidad);
+    formData.append('relato_hechos', datos.relatoHechos);
+    formData.append('descargos', datos.descargos);
+    formData.append('numero_de_medidas_correctivas', datos.numeroDeMedidasCorrectivas);
+    formData.append('title', datos.title);
+
+    // Añadir el archivo PDF si existe
+    if (datos.pdfMedidas) {
+      formData.append('pdfMedidas', datos.pdfMedidas);
+    }
+
+    // Imprimir cada campo de FormData usando forEach para depuración
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    // Enviar la solicitud HTTP POST al endpoint de la API
+    return this.http.post<any>(`${this.apiUrl}/Robots/crear_medidas_correctivas/`, formData)
+      .pipe(
+        catchError(this.handleError)  // Manejo de errores
+      );
+  }
 
 
 

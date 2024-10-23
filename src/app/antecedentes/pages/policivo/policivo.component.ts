@@ -18,6 +18,7 @@ import { NavbarSuperiorComponent } from '../../../shared/components/navbar-super
 import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
 import { HomeService } from '../../../shared/services/home/home.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-policivo',
@@ -43,11 +44,10 @@ import { HomeService } from '../../../shared/services/home/home.service';
     MatExpansionModule,
   ],
   templateUrl: './policivo.component.html',
-  styleUrl: './policivo.component.css'
+  styleUrls: ['./policivo.component.css']
 })
 export class PolicivoComponent {
   pdfNombrePolicivo: string | null = null;
-  documentoForm: FormGroup;
 
   // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInputPolicivo') documentoInputPolicivo!: ElementRef;
@@ -56,32 +56,55 @@ export class PolicivoComponent {
     private antecedentesService: AntecedentesService,
     private router: Router,
     private homeService: HomeService
-  ) {
-    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
-    this.documentoForm = new FormGroup({
-      tipoDocumento: new FormControl(''),  // Select de tipo de documento
-      numeroDocumento: new FormControl('')  // Input para número de documento
-    });
-  }
+  ) {}
+
   // Formulario reactivo
   policivoForm = new FormGroup({
     estadoPolicivo: new FormControl('', Validators.required),
     title: new FormControl(''),
-    pdfPolicivo: new FormControl(null),
+    pdfPolicivo: new FormControl<File | null>(null),
+    tipoDocumento: new FormControl('', Validators.required),
+    numeroDocumento: new FormControl('', Validators.required),
   });
 
   // Método para manejar la selección de archivo
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pdfNombrePolicivo = file.name;
-      this.policivoForm.patchValue({
-        pdfPolicivo: file,
-        title: file.name  // Actualizar el campo title con el nombre del archivo
-      });
-      this.policivoForm.patchValue({ pdfPolicivo: file });
-      this.policivoForm.get('pdfPolicivo')?.updateValueAndValidity();
+      if (file.type.startsWith('image/')) {
+        this.convertImageToPdf(file);
+      } else {
+        this.pdfNombrePolicivo = file.name;
+        this.policivoForm.patchValue({
+          pdfPolicivo: file,
+          title: file.name  // Actualizar el campo title con el nombre del archivo
+        });
+        this.policivoForm.get('pdfPolicivo')?.updateValueAndValidity();
+      }
     }
+  }
+
+  // Método para convertir una imagen a PDF
+  convertImageToPdf(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const imageData = e.target.result;
+
+      const pdf = new jsPDF();
+      pdf.addImage(imageData, 'JPEG', 10, 10, 180, 160);
+
+      const pdfBlob = pdf.output('blob');
+      const pdfFile = new File([pdfBlob], `${file.name.split('.')[0]}.pdf`, { type: 'application/pdf' });
+
+      this.policivoForm.patchValue({
+        pdfPolicivo: pdfFile,
+        title: pdfFile.name
+      });
+      this.policivoForm.get('pdfPolicivo')?.updateValueAndValidity();
+      this.pdfNombrePolicivo = pdfFile.name;
+    };
+
+    reader.readAsDataURL(file);
   }
 
   // Método para simular clic en el input de archivo
@@ -115,12 +138,11 @@ export class PolicivoComponent {
             icon: 'success',
             title: 'Formulario policivo cargado',
             text: 'La información del formulario policivo se ha cargado correctamente',
-            confirmButtonText: 'Aceptar'  // Mostrar botón "Aceptar"
+            confirmButtonText: 'Aceptar'
           }).then((result) => {
-            if (result.isConfirmed) {
-              // Redirigir cuando el usuario haga clic en "Aceptar"
-              this.router.navigate(['/home']);
-            }
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/policivo']);
+            });
           });
         },
         (error) => {
@@ -135,56 +157,12 @@ export class PolicivoComponent {
         }
       );
     } else {
-      console.log("Formulario policivo inválido");
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario inválido',
+        text: 'Por favor, completa todos los campos requeridos.',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
-
-  // Método para manejar el evento del botón de búsqueda
-  buscar() {
-    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
-    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
-
-    console.log(`Tipo de Documento: ${tipoDocumento}`);
-    console.log(`Número de Documento: ${numeroDocumento}`);
-
-    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
-      (data) => {
-        console.log(data);
-        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
-        localStorage.setItem('operario', JSON.stringify({
-          tipoDocumento,
-          numeroDocumento,
-          codigoContrato: data.codigo_contrato
-        }));
-        // Swal de éxito
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Información cargada correctamente',
-          confirmButtonText: 'Aceptar'
-        });
-      },
-      (error) => {
-        // Aquí manejamos el error
-        console.error('Error al obtener la información:', error.message);
-        if (error.message === 'El documento no fue encontrado') {
-          // Puedes mostrar un mensaje personalizado al usuario
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El documento no fue encontrado.'
-          });
-          return;
-        }
-        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al obtener la información.'
-        });
-      }
-    );
-  }
-
-
 }

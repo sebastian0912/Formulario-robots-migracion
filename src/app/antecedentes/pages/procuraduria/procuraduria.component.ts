@@ -13,11 +13,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { NavbarLateralComponent } from '../../../shared/components/navbar-lateral/navbar-lateral.component';
 import { NavbarSuperiorComponent } from '../../../shared/components/navbar-superior/navbar-superior.component';
-import Swal from 'sweetalert2';
 import { AntecedentesService } from '../../../shared/services/antecedentes/antecedentes.service';
 import { HomeService } from '../../../shared/services/home/home.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-procuraduria',
@@ -43,11 +44,10 @@ import { HomeService } from '../../../shared/services/home/home.service';
     MatExpansionModule,
   ],
   templateUrl: './procuraduria.component.html',
-  styleUrl: './procuraduria.component.css'
+  styleUrls: ['./procuraduria.component.css']
 })
 export class ProcuraduriaComponent {
   pdfNombreProcuraduria: string | null = null;
-  documentoForm: FormGroup;
 
   // Utilizar ViewChild para referenciar el input de archivo
   @ViewChild('documentoInputProcuraduria') documentoInputProcuraduria!: ElementRef;
@@ -56,19 +56,15 @@ export class ProcuraduriaComponent {
     private antecedentesService: AntecedentesService,
     private router: Router,
     private homeService: HomeService
-  ) {
-    // Inicializamos el formulario con dos campos: tipoDocumento y numeroDocumento
-    this.documentoForm = new FormGroup({
-      tipoDocumento: new FormControl(''),  // Select de tipo de documento
-      numeroDocumento: new FormControl('')  // Input para número de documento
-    });
-  }
+  ) {}
 
   // Formulario reactivo
   ProcuraduriaForm = new FormGroup({
+    tipoDocumento: new FormControl('', Validators.required),
+    numeroDocumento: new FormControl('', Validators.required),
     estado_procuraduria: new FormControl('', Validators.required),
-    pdfProcuraduria: new FormControl(null),
-    fecha_procuraduria: new FormControl(''),
+    pdfProcuraduria: new FormControl<File | null>(null),
+    fecha_procuraduria: new FormControl('', Validators.required),
     title: new FormControl('')
   });
 
@@ -76,14 +72,40 @@ export class ProcuraduriaComponent {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pdfNombreProcuraduria = file.name;
-      this.ProcuraduriaForm.patchValue({
-        pdfProcuraduria: file,
-        title: file.name  // Actualizar el campo title con el nombre del archivo
-      });
-      this.ProcuraduriaForm.patchValue({ pdfProcuraduria: file });
-      this.ProcuraduriaForm.get('pdfProcuraduria')?.updateValueAndValidity();
+      if (file.type.startsWith('image/')) {
+        this.convertImageToPdf(file);
+      } else {
+        this.pdfNombreProcuraduria = file.name;
+        this.ProcuraduriaForm.patchValue({
+          pdfProcuraduria: file,
+          title: file.name  // Actualizar el campo title con el nombre del archivo
+        });
+        this.ProcuraduriaForm.get('pdfProcuraduria')?.updateValueAndValidity();
+      }
     }
+  }
+
+  // Método para convertir una imagen a PDF
+  convertImageToPdf(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const imageData = e.target.result;
+
+      const pdf = new jsPDF();
+      pdf.addImage(imageData, 'JPEG', 10, 10, 180, 160);
+
+      const pdfBlob = pdf.output('blob');
+      const pdfFile = new File([pdfBlob], `${file.name.split('.')[0]}.pdf`, { type: 'application/pdf' });
+
+      this.ProcuraduriaForm.patchValue({
+        pdfProcuraduria: pdfFile,
+        title: pdfFile.name
+      });
+      this.ProcuraduriaForm.get('pdfProcuraduria')?.updateValueAndValidity();
+      this.pdfNombreProcuraduria = pdfFile.name;
+    };
+
+    reader.readAsDataURL(file);
   }
 
   // Método para simular clic en el input de archivo
@@ -119,10 +141,9 @@ export class ProcuraduriaComponent {
             text: 'La información del formulario Procuraduria se ha cargado correctamente',
             confirmButtonText: 'Aceptar'  // Mostrar botón "Aceptar"
           }).then((result) => {
-            if (result.isConfirmed) {
-              // Redirigir cuando el usuario haga clic en "Aceptar"
-              this.router.navigate(['/home']);
-            }
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/procuraduria']);
+            });
           });
         },
         (error) => {
@@ -137,55 +158,12 @@ export class ProcuraduriaComponent {
         }
       );
     } else {
-      console.log("Formulario Procuraduria inválido");
+      Swal.fire({
+        icon: 'error',
+        title: 'Formulario inválido',
+        text: 'Por favor, completa todos los campos requeridos.',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
-
-  // Método para manejar el evento del botón de búsqueda
-  buscar() {
-    const tipoDocumento = this.documentoForm.get('tipoDocumento')?.value;
-    const numeroDocumento = this.documentoForm.get('numeroDocumento')?.value;
-
-    console.log(`Tipo de Documento: ${tipoDocumento}`);
-    console.log(`Número de Documento: ${numeroDocumento}`);
-
-    this.homeService.traerInformacionContratacion(numeroDocumento).subscribe(
-      (data) => {
-        console.log(data);
-        // Guardar operario con tipoDocumento, numeroDocumento y data.codigo_contrato
-        localStorage.setItem('operario', JSON.stringify({
-          tipoDocumento,
-          numeroDocumento,
-          codigoContrato: data.codigo_contrato
-        }));
-        // Swal de éxito
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Información cargada correctamente',
-          confirmButtonText: 'Aceptar'
-        });
-      },
-      (error) => {
-        // Aquí manejamos el error
-        console.error('Error al obtener la información:', error.message);
-        if (error.message === 'El documento no fue encontrado') {
-          // Puedes mostrar un mensaje personalizado al usuario
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'El documento no fue encontrado.'
-          });
-          return;
-        }
-        // Puedes mostrar el error al usuario mediante una alerta, snackbar, o cualquier otra opción
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Ocurrió un error al obtener la información.'
-        });
-      }
-    );
-  }
-
 }

@@ -2,10 +2,12 @@
     <app-navbar-lateral></app-navbar-lateral>
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
+
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
+                    <div class="buscar" [formGroup]="policivoForm">
+
                         <!-- Input para el tipo de documento (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de Documento</mat-label>
@@ -18,36 +20,25 @@
                             <input matInput formControlName="numeroDocumento">
                         </mat-form-field>
 
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="policivoForm">
-
                         <!-- Input para Estado Policivo (reemplazado el select) -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Estado Policivo</mat-label>
                             <input matInput formControlName="estadoPolicivo" placeholder="Escribe el estado policivo">
-                        </mat-form-field>                        
+                        </mat-form-field>
 
                         <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
                         <div class="example-full-width">
                             <!-- Input de archivo oculto -->
-                            <input type="file" #documentoInputPolicivo (change)="onFileSelected($event)" accept=".pdf"
-                                hidden>
+                            <input type="file" #documentoInputPolicivo (change)="onFileSelected($event)"
+                                accept=".pdf, image/*" hidden>
 
                             <!-- Botón para seleccionar archivo -->
-                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Policivo</button>
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF o Imagen</button>
 
                             <!-- Mostrar el nombre del archivo seleccionado -->
                             <span *ngIf="pdfNombrePolicivo">{{ pdfNombrePolicivo }}</span>
                         </div>
+
 
                         <!-- Botón para cargar la información -->
                         <div class="example-full-width">

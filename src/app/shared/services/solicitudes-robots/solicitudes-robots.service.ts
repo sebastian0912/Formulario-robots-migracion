@@ -13,16 +13,25 @@ export class SolicitudesRobotsService {
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
-
   private handleError(error: any): Observable<never> {
     return throwError(() => new Error(error.message || 'Error en la solicitud HTTP'));
   }
-  
-
 
   // EstadosRobots/sin_consultar
   consultarEstadosRobots(): Observable<any> {
     return this.http.get(`${this.apiUrl}/EstadosRobots/sin_consultar`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // EstadosRobots/pendientes_por_oficina
+  consultarEstadosRobotsPendientesPorOficina(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/EstadosRobots/pendientes_por_oficina`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // EstadosRobots/pendientes_generales
+  consultarEstadosRobotsPendientesGenerales(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/EstadosRobots/pendientes_generales`)
       .pipe(catchError(this.handleError));
   }
 

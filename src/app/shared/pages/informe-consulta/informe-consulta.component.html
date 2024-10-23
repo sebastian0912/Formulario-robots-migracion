@@ -1,0 +1,79 @@
+<div class="app-layout">
+    <app-navbar-lateral></app-navbar-lateral>
+    <div class="contenedor">
+        <app-navbar-superior></app-navbar-superior>
+
+        <!-- Tabla de Estado Robots General -->
+        <div class="tabla">
+            <h1 class="title">Estado Robots General</h1>
+            <div class="table-container">
+                <table mat-table class="mat-elevation-z8">
+                    <thead>
+                        <tr>
+                            <th colspan="8" class="header">Estado Robots General</th>
+                        </tr>
+                        <tr>
+                            <td class="column">Cantidad Adress Faltantes</td>
+                            <td class="column">Cantidad Policivo Faltantes</td>
+                            <td class="column">Cantidad OFAC Faltantes</td>
+                            <td class="column">Cantidad Contraloria Faltantes</td>
+                            <td class="column">Cantidad Sisben Faltantes</td>
+                            <td class="column">Cantidad Procuraduria Faltantes</td>
+                            <td class="column">Cantidad Fondo Pensión Faltantes</td>
+                            <td class="column">Cantidad Unión Faltantes</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.adress_pendientes > threshold}">{{
+                                dataGenerales.adress_pendientes }}</td>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.policivo_pendientes > threshold}">{{
+                                dataGenerales.policivo_pendientes }}</td>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.ofac_pendientes > threshold}">{{
+                                dataGenerales.ofac_pendientes }}</td>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.contraloria_pendientes > threshold}">
+                                {{ dataGenerales.contraloria_pendientes }}</td>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.sisben_pendientes > threshold}">{{
+                                dataGenerales.sisben_pendientes }}</td>
+                            <td class="value"
+                                [ngClass]="{'warning': dataGenerales.procuraduria_pendientes > threshold}">{{
+                                dataGenerales.procuraduria_pendientes }}</td>
+                            <td class="value"
+                                [ngClass]="{'warning': dataGenerales.fondo_pension_pendientes > threshold}">{{
+                                dataGenerales.fondo_pension_pendientes }}</td>
+                            <td class="value" [ngClass]="{'warning': dataGenerales.union_pendientes > threshold}">{{
+                                dataGenerales.union_pendientes }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla de Matriz de Progreso Robots por Oficina -->
+        <div class="tabla">
+            <h1 class="title">Matriz de Progreso Robots por Oficina</h1>
+            <div class="table-container">
+              <table mat-table class="mat-elevation-z8">
+                <thead>
+                  <tr>
+                    <th class="header">Oficinas/Faltantes</th>
+                    <th class="header" *ngFor="let oficina of dataPorOficina">{{ oficina.oficina }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tipo of ['adress_pendientes', 'policivo_pendientes', 'ofac_pendientes', 'contraloria_pendientes', 'sisben_pendientes', 'procuraduria_pendientes', 'fondo_pension_pendientes', 'union_pendientes']">
+                    <td class="column">{{ tipo | titlecase }}</td>
+                    <ng-container *ngFor="let oficina of dataPorOficina">
+                      <td class="value" [ngClass]="{'low': oficina[tipo] == 0, 'medium': oficina[tipo] > 0 && oficina[tipo] <= 100, 'high': oficina[tipo] > 100}">
+                        {{ oficina[tipo] }}
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+
+    </div>
+</div>

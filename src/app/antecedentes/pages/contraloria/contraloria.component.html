@@ -6,8 +6,9 @@
         <mat-card>
             <mat-card-content>
                 <div class="search-container">
-                    <div class="buscar" [formGroup]="documentoForm">
-                        <!-- Input para el tipo de documento (reemplazado el select) -->
+                    <div class="buscar" [formGroup]="contraloriaForm">
+
+                        <!-- Input para el tipo de documento -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Tipo de Documento</mat-label>
                             <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
@@ -16,50 +17,37 @@
                         <!-- Input para el número de documento -->
                         <mat-form-field appearance="fill" class="example-full-width">
                             <mat-label>Número de Documento</mat-label>
-                            <input matInput formControlName="numeroDocumento">
+                            <input matInput formControlName="numeroDocumento" placeholder="Escribe el número de documento">
                         </mat-form-field>
 
-                        <!-- Botón para buscar -->
-                        <button mat-flat-button (click)="buscar()" class="boton">Buscar</button>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-            <mat-card-content>
-                <div class="search-container">
-                    <div class="buscar" [formGroup]="ControlariaForm">
-
-                        <!--Estado Controlaria como input de texto-->
+                        <!-- Estado Contraloria como input de texto -->
                         <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Estado Controlaria</mat-label>
-                            <input matInput formControlName="estadoControlaria" placeholder="Estado Controlaria">   
+                            <mat-label>Estado Contraloría</mat-label>
+                            <input matInput formControlName="estadoContraloria" placeholder="Escribe el estado de Contraloría">
                         </mat-form-field>
 
-                        <!-- Fecha Controlaria como campo de texto sin datepicker -->
+                        <!-- Fecha Contraloría como campo de texto sin datepicker -->
                         <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Fecha Controlaria</mat-label>
-                            <input matInput formControlName="fechaControlaria" placeholder="Fecha Controlaria">
+                            <mat-label>Fecha Contraloría</mat-label>
+                            <input matInput formControlName="fechaContraloria" placeholder="DD/MM/YYYY">
                         </mat-form-field>
 
-
-                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
+                        <!-- Botón para cargar PDF del Documento -->
                         <div class="example-full-width">
                             <!-- Input de archivo oculto -->
-                            <input type="file" #documentoInputControlaria (change)="onFileSelected($event)" accept=".pdf"
-                                hidden>
+                            <input type="file" #documentoInputContraloria (change)="onFileSelected($event)"
+                                accept=".pdf, image/*" hidden>
 
                             <!-- Botón para seleccionar archivo -->
-                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Controlaria</button>
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Contraloría</button>
 
                             <!-- Mostrar el nombre del archivo seleccionado -->
-                            <span *ngIf="pdfNombreControlaria">{{ pdfNombreControlaria }}</span>
+                            <span *ngIf="pdfNombreContraloria">{{ pdfNombreContraloria }}</span>
                         </div>
 
                         <!-- Botón para cargar la información -->
                         <div class="example-full-width">
-                            <button mat-flat-button (click)="cargarInformacionControlaria()"
+                            <button mat-flat-button (click)="cargarInformacionContraloria()"
                                 style="background: #8dd603;">Cargar Información</button>
                         </div>
 
