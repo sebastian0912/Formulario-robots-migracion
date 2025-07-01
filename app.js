@@ -22,7 +22,7 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:4200');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.removeMenu();
+    mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${path.join(__dirname, 'dist/formularios-robots-migracion/browser/index.html')}`);
   }
 

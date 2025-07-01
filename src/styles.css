@@ -127,19 +127,38 @@ body {
 }
 
 mat-card {
-    width: 75vw;
+    width: 50vw;
     padding: 20px;
     margin-bottom: 10px;
 }
 
 
 .example-full-width {
-    width: 30%;
+    max-width: 70%;
     height: 80px;
     margin: 3px 10px -5px 10px;
 }
 
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
+.input-group label {
+    width: 250px;
+    /* Ajusta el ancho según sea necesario */
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.example-full-width {
+    flex: 1;
+}
+
+.input-group button {
+    margin-left: 10px;
+}
 
 
 

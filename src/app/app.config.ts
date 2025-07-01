@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { interceptor } from './core/service/interceptor/interceptor.service'; // Importa tu interceptor
 
 export const appConfig: ApplicationConfig = {
+  
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
@@ -19,4 +20,5 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([interceptor])  // Añadir el interceptor
     ),
   ],
+
 };

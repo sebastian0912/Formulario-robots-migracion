@@ -5,43 +5,46 @@
 
         <mat-card>
             <mat-card-content>
+                <h1 class="title">Policivos</h1>
+
                 <div class="search-container">
                     <div class="buscar" [formGroup]="policivoForm">
 
-                        <!-- Input para el tipo de documento (reemplazado el select) -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Tipo de Documento</mat-label>
-                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
-                        </mat-form-field>
+                        <!-- Contenedor para Tipo de Documento -->
+                        <div class="input-group">
+                            <label>Tipo de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Input para el número de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Número de Documento</mat-label>
-                            <input matInput formControlName="numeroDocumento">
-                        </mat-form-field>
+                        <!-- Contenedor para Número de Documento -->
+                        <div class="input-group">
+                            <label>Número de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="numeroDocumento" placeholder="Escribe el número de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Input para Estado Policivo (reemplazado el select) -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Estado Policivo</mat-label>
-                            <input matInput formControlName="estadoPolicivo" placeholder="Escribe el estado policivo">
-                        </mat-form-field>
+                        <!-- Contenedor para Estado Policivo -->
+                        <div class="input-group">
+                            <label>Estado Policivo:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="estadoPolicivo" placeholder="Escribe el estado policivo">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
-                        <div class="example-full-width">
-                            <!-- Input de archivo oculto -->
+                        <!-- Botón para cargar PDF del Documento -->
+                        <div class="input-group">
+                            <label>Archivo PDF/Imagen:</label>
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF o Imagen</button>
                             <input type="file" #documentoInputPolicivo (change)="onFileSelected($event)"
                                 accept=".pdf, image/*" hidden>
-
-                            <!-- Botón para seleccionar archivo -->
-                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF o Imagen</button>
-
-                            <!-- Mostrar el nombre del archivo seleccionado -->
                             <span *ngIf="pdfNombrePolicivo">{{ pdfNombrePolicivo }}</span>
                         </div>
 
-
                         <!-- Botón para cargar la información -->
-                        <div class="example-full-width">
+                        <div class="input-group">
                             <button mat-flat-button (click)="cargarInformacionPolicivo()" style="background: #8dd603;">
                                 Cargar Información
                             </button>
@@ -51,6 +54,5 @@
                 </div>
             </mat-card-content>
         </mat-card>
-
     </div>
 </div>

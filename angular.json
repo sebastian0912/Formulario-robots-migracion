@@ -41,7 +41,10 @@
               "moment",
               "rgbcolor",
               "raf",
-              "jspdf"
+              "jspdf",
+              "core-js",
+              "canvg",
+              "@babel/runtime"
             ]
           },
           "configurations": {

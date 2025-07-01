@@ -1,6 +1,6 @@
 {
   "name": "formularios-robots-migracion",
-  "version": "0.0.0",
+  "version": "0.0.4",
   "description": "Programa para formularios de antecedentes de personal",
   "author": "SebastianGuarnizoCampos",
   "license": "Uso Interno en TuAlianza, Apoyo Laboral, Comercializadora, prohibida su distribucion",
@@ -11,7 +11,7 @@
   },
   "build": {
     "appId": "com.gestion.robots",
-    "productName": "form-robots",
+    "productName": "Formularios Robots",
     "directories": {
       "output": "dist/electron"
     },

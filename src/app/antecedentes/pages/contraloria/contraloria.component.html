@@ -5,48 +5,53 @@
 
         <mat-card>
             <mat-card-content>
+                <h1 class="title">Contraloria</h1>
+
                 <div class="search-container">
                     <div class="buscar" [formGroup]="contraloriaForm">
 
-                        <!-- Input para el tipo de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Tipo de Documento</mat-label>
-                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
-                        </mat-form-field>
+                        <!-- Contenedor para Tipo de Documento -->
+                        <div class="input-group">
+                            <label>Tipo de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Input para el número de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Número de Documento</mat-label>
-                            <input matInput formControlName="numeroDocumento" placeholder="Escribe el número de documento">
-                        </mat-form-field>
+                        <!-- Contenedor para Número de Documento -->
+                        <div class="input-group">
+                            <label>Número de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="numeroDocumento" placeholder="Escribe el número de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Estado Contraloria como input de texto -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Estado Contraloría</mat-label>
-                            <input matInput formControlName="estadoContraloria" placeholder="Escribe el estado de Contraloría">
-                        </mat-form-field>
+                        <!-- Contenedor para Estado Contraloría -->
+                        <div class="input-group">
+                            <label>Estado Contraloría:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="estadoContraloria" placeholder="Escribe el estado de Contraloría">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Fecha Contraloría como campo de texto sin datepicker -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Fecha Contraloría</mat-label>
-                            <input matInput formControlName="fechaContraloria" placeholder="DD/MM/YYYY">
-                        </mat-form-field>
+                        <!-- Contenedor para Fecha Contraloría -->
+                        <div class="input-group">
+                            <label>Fecha Contraloría:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="fechaContraloria" placeholder="DD/MM/YYYY">
+                            </mat-form-field>
+                        </div>
 
                         <!-- Botón para cargar PDF del Documento -->
-                        <div class="example-full-width">
-                            <!-- Input de archivo oculto -->
+                        <div class="input-group">
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Contraloría</button>
                             <input type="file" #documentoInputContraloria (change)="onFileSelected($event)"
                                 accept=".pdf, image/*" hidden>
-
-                            <!-- Botón para seleccionar archivo -->
-                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF Contraloría</button>
-
-                            <!-- Mostrar el nombre del archivo seleccionado -->
                             <span *ngIf="pdfNombreContraloria">{{ pdfNombreContraloria }}</span>
                         </div>
 
                         <!-- Botón para cargar la información -->
-                        <div class="example-full-width">
+                        <div class="input-group">
                             <button mat-flat-button (click)="cargarInformacionContraloria()"
                                 style="background: #8dd603;">Cargar Información</button>
                         </div>

@@ -3,58 +3,64 @@
     <div class="contenedor">
         <app-navbar-superior></app-navbar-superior>
 
-
-
         <mat-card>
             <mat-card-content>
+                <h1 class="title">Fondo de pensión</h1>
+
                 <div class="search-container">
                     <div class="buscar" [formGroup]="FondoPensionForm">
 
-                        <!-- Input para el tipo de documento (reemplazado el select) -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Tipo de Documento</mat-label>
-                            <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
-                        </mat-form-field>
+                        <!-- Contenedor para Tipo de Documento -->
+                        <div class="input-group">
+                            <label>Tipo de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="tipoDocumento" placeholder="Escribe el tipo de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Input para el número de documento -->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Número de Documento</mat-label>
-                            <input matInput formControlName="numeroDocumento">
-                        </mat-form-field>
+                        <!-- Contenedor para Número de Documento -->
+                        <div class="input-group">
+                            <label>Número de Documento:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="numeroDocumento" placeholder="Número de documento">
+                            </mat-form-field>
+                        </div>
 
-                        <!--Estado FondoPension-->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Estado FondoPension</mat-label>
-                            <input matInput formControlName="estadoFondoPension" placeholder="Estado FondoPension">
-                        </mat-form-field>
+                        <!-- Contenedor para Estado FondoPension -->
+                        <div class="input-group">
+                            <label>Estado FondoPension:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="estadoFondoPension" placeholder="Estado FondoPension">
+                            </mat-form-field>
+                        </div>
 
-                        <!--entidad_fondo_pension-->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Entidad Fondo de Pension</mat-label>
-                            <input matInput formControlName="entidad_fondo_pension" placeholder="Entidad FondoPension">
-                        </mat-form-field>
+                        <!-- Contenedor para Entidad Fondo de Pension -->
+                        <div class="input-group">
+                            <label>Entidad Fondo de Pension:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="entidad_fondo_pension" placeholder="Entidad FondoPension">
+                            </mat-form-field>
+                        </div>
 
-                        <!--Fecha FondoPension-->
-                        <mat-form-field appearance="fill" class="example-full-width">
-                            <mat-label>Fecha Fondo de Pension</mat-label>
-                            <input matInput formControlName="fecha_fondo_pension" placeholder="Fecha FondoPension">
-                        </mat-form-field>
+                        <!-- Contenedor para Fecha FondoPension -->
+                        <div class="input-group">
+                            <label>Fecha Fondo de Pension:</label>
+                            <mat-form-field appearance="fill" class="example-full-width">
+                                <input matInput formControlName="fecha_fondo_pension" placeholder="Fecha FondoPension">
+                            </mat-form-field>
+                        </div>
 
-                        <!-- Botón para cargar PDF del Documento (fuera de mat-form-field) -->
-                        <div class="example-full-width">
-                            <!-- Input de archivo oculto -->
+                        <!-- Botón para cargar PDF del Documento -->
+                        <div class="input-group">
+                            <label>Archivo PDF:</label>
+                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF FondoPension</button>
                             <input type="file" #documentoInputFondoPension (change)="onFileSelected($event)"
                                 accept=".pdf, image/*" hidden>
-
-                            <!-- Botón para seleccionar archivo -->
-                            <button mat-flat-button (click)="seleccionarArchivo()">Seleccionar PDF FondoPension</button>
-
-                            <!-- Mostrar el nombre del archivo seleccionado -->
                             <span *ngIf="pdfNombreFondoPension">{{ pdfNombreFondoPension }}</span>
                         </div>
 
                         <!-- Botón para cargar la información -->
-                        <div class="example-full-width">
+                        <div class="input-group">
                             <button mat-flat-button (click)="cargarInformacionFondoPension()"
                                 style="background: #8dd603;">Cargar Información</button>
                         </div>
